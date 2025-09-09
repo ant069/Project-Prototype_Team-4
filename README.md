@@ -75,15 +75,144 @@ Today I focused on learning Bootstrap and applying it to our prototype. At first
 
 Dev Log: Gael Rodriguez:
 
-When we started this project, I worked on building the base structure of our website. I created the HTML skeleton, set up the main sections and made sure everything had a clear and organized layout.
-I also implemented the header with navigation and the footer, so users can move easily between sections and understand the purpose of the page. For the content, I made reusable cards for the breathing exercises and daily tips, which helps keep the design consistent and clean.
-Even though my main focus was the base structure, I’m excited to explore other parts of the project, like improving the interface and adding dynamic elements.
+Date: 09/09
+
+Project: MindCare
+
+Goals for the documented session
+
+ Build the base structure of the website
+
+ Create a clear and organized HTML skeleton
+
+ Implement navigation (header and footer)
+
+ Design reusable components for content
+
+Tasks Completed
+
+Created the HTML skeleton with the main sections of the site.
+
+Implemented a header with navigation and a footer for clarity and ease of use.
+
+Designed reusable cards for breathing exercises and daily tips to maintain consistency.
+
+Ensured the layout remained clean and organized across sections.
+
+Use of Gen AI
+
+Tool used: ChatGPT
+
+Purpose: Consulted for doubts regarding Bootstrap structure and best practices.
+
+Reflection: It was useful to confirm correct syntax, but the structure was coded directly by me.
+
+What I Learned
+
+How to organize a webpage with a clear skeleton before adding detailed design.
+
+The importance of reusable components (like cards) for consistent layout.
+
+How navigation and footer elements improve user experience.
+
+The balance between structure and design in web development.
+
+Challenges & Bugs
+
+❌ Unsure how to keep sections visually consistent while reusing elements.
+✅ Solved by using Bootstrap classes and external CSS styling.
+
+Resources Used
+
+Bootstrap documentation (layout and cards)
+
+Class notes on HTML5 and responsive design
+
+Team feedback on structure
+
+Next Steps
+
+Collaborate on improving the interface with color palette and typography.
+
+Add placeholder content for testing responsiveness.
+
+Explore possible dynamic elements for future iterations.
+
+Personal Reflection
+
+“This session I focused on the structural foundation of our website. Setting up the skeleton, header, and footer gave me a clearer idea of how everything connects. I also enjoyed working on reusable cards, which made the design feel cleaner. While my focus was the base, I’m excited to later explore interface improvements and even some dynamic features.”
 
 Dev Log: Diego Arias:
-When we were looking for what to do I investigated what proper things we could add to the page. 
-Our page is focused on Mind Care, that's why the name. Some of the most important things that we considered to apply in our page was a home page that has elements that can guide you to some exercises, such as breathing, tips and some resources you can navigate in that helps you. This is the navigation part.
-Once you scroll down you get to see those spaces that I was talking about. We decided to use blue and green colors as subtle as we could that reflects peace, calm, related to breathing and oxygen. These colors are used in the text and we use withe to have a calm ambience once you enter our page.
-I was assigned to research and design the interface of our page. I’ve focused more on working on that part of the project, but I also want to get into exploring other aspects, such as the internal structure of the skeleton of our program.
+Date: 09/09
+
+Project:  MindCare
+
+Goals for the documented session
+
+ Define the navigation flow of the website
+
+ Research suitable design elements (colors, layout, sections)
+
+ Contribute to interface design for the prototype
+
+ Explore possibilities for the internal structure of the project
+
+Tasks Completed
+
+Investigated what elements would be appropriate to add to the page.
+
+Defined the homepage design with navigation to exercises, breathing tips, and resources.
+
+Designed the interface to include scrolling sections with clear spaces for content.
+
+Selected blue and green as the main colors to reflect peace, calmness, breathing, and oxygen.
+
+Applied white backgrounds to reinforce a calm ambience when users visit the site.
+
+Focused on interface design while beginning to consider internal structure possibilities.
+
+Use of Gen AI
+
+Tool used: ChatGPT
+
+Purpose: Asked questions related to Bootstrap layout and best practices.
+
+Reflection: Helped clarify doubts about responsive design but the design work was created directly by me.
+
+What I Learned
+
+The importance of navigation flow in user experience.
+
+How colors can influence the mood and perception of a website.
+
+The balance between simplicity (calm ambience) and functionality.
+
+Early understanding of how the structure (skeleton) supports the final product.
+
+Challenges & Bugs
+
+❌ Difficulty deciding which colors would look professional but also reflect calmness.
+✅ Solved by selecting subtle shades of blue and green and balancing with white.
+
+Resources Used
+
+Bootstrap documentation (for layout research)
+
+Color psychology references for UI design
+
+Class notes on HTML structure
+
+Next Steps
+
+Work more on the internal structure of the website.
+
+Test the layout on both wide and mobile views.
+
+Collaborate with the team to integrate interface with content.
+
+Personal Reflection
+
+“This session allowed me to focus on design decisions that directly affect how users will experience our site. Researching colors and navigation gave me a better understanding of how design communicates calmness. While I worked mostly on the interface, I am motivated to also explore the internal structure of the project in future sessions.”
 
 Dev Log as a Group: 
 
