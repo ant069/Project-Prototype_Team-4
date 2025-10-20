@@ -1,0 +1,348 @@
+:root {
+  --primary: #007bff;
+  --success: #28a745;
+  --danger: #dc3545;
+  --warning: #ffc107;
+  --info: #17a2b8;
+  --pink: #FADADD;
+  --lavender: #E6E6FA;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: #333;
+  background-color: #fff;
+  padding-top: 56px;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.hero {
+  background: linear-gradient(rgba(0, 123, 255, 0.8), rgba(40, 167, 69, 0.8)), url("https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200") center/cover no-repeat;
+  min-height: 100vh;
+  position: relative;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  animation: fadeInDown 1s ease-out;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  margin-top: 20px;
+  animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.section-title {
+  position: relative;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--success));
+}
+
+.exercise-card {
+  border: none;
+  border-radius: 15px;
+  background-color: var(--pink);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.exercise-card:hover {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.exercise-icon {
+  background: linear-gradient(135deg, var(--primary), var(--success));
+  color: white;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+  font-size: 2rem;
+}
+
+.tip-card {
+  background-color: var(--lavender);
+  border-left: 5px solid var(--success);
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.tip-card:hover {
+  transform: translateX(5px);
+}
+
+.resource-card {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 2px solid #f0f0f0;
+}
+
+.resource-card:hover {
+  border-color: var(--primary);
+}
+
+.stat-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.feature-card {
+  padding: 30px;
+  border-radius: 15px;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  background: white;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.recent-session-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.recent-session-card:hover {
+  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.breathing-circle {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--info));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.breathing-circle.inhale {
+  animation: breatheIn 4s ease-in-out;
+}
+
+.breathing-circle.hold {
+  animation: hold 4s ease-in-out;
+}
+
+.breathing-circle.exhale {
+  animation: breatheOut 4s ease-in-out;
+}
+
+.breathing-square {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, var(--success), var(--info));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border-radius: 10px;
+}
+
+.breathing-square.box-animate {
+  animation: boxBreath 16s ease-in-out infinite;
+}
+
+.circle-text, .square-text {
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.timer-display {
+  font-size: 4rem;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.instruction-text {
+  font-size: 1.5rem;
+  color: var(--success);
+  font-weight: 500;
+}
+
+.exercise-section {
+  padding: 40px 0;
+}
+
+.instructions ol {
+  text-align: left;
+  font-size: 1.1rem;
+}
+
+.quote-card {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.tips-section {
+  background: #f8f9fa;
+  border-radius: 15px;
+}
+
+footer.footer {
+  background: linear-gradient(90deg, var(--primary), var(--success));
+}
+
+.footer a:hover {
+  opacity: 0.8;
+}
+
+.social-icons i {
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.social-icons i:hover {
+  transform: scale(1.2);
+}
+
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.btn {
+  transition: all 0.3s ease;
+  border-radius: 25px;
+  padding: 10px 30px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.navbar {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.nav-link {
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: #fff !important;
+  opacity: 0.8;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes breatheIn {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+@keyframes breatheOut {
+  0%, 100% { transform: scale(1.3); }
+  50% { transform: scale(1); }
+}
+
+@keyframes hold {
+  0%, 100% { transform: scale(1.3); }
+}
+
+@keyframes boxBreath {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1.2); }
+  75% { transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.animate-slide-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .breathing-circle, .breathing-square {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .timer-display {
+    font-size: 3rem;
+  }
+}
