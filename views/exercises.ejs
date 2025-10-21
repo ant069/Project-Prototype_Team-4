@@ -14,6 +14,7 @@
   <div class="container py-5">
     <h1 class="text-center mb-5">Breathing Exercises</h1>
 
+    <!-- 4-7-8 Breathing -->
     <div id="four-seven-eight" class="exercise-section mb-5">
       <div class="row align-items-center">
         <div class="col-md-6">
@@ -22,12 +23,12 @@
           <div class="instructions">
             <h5>How to do it:</h5>
             <ol>
-              <li>Exhale completely through your mouth</li>
+              <li>Breathe in through nose for 4 seconds</li>
               <li>Hold your breath for 7 seconds</li>
               <li>Exhale through mouth for 8 seconds</li>
               <li>Repeat cycle 4 times</li>
             </ol>
-            <button class="btn btn-primary btn-lg" onclick="startExercise('4-7-8', 19)">
+            <button class="btn btn-primary btn-lg" onclick="startExercise('4-7-8 Breathing', 19)">
               <i class="bi bi-play-circle"></i> Start Exercise
             </button>
           </div>
@@ -42,6 +43,7 @@
 
     <hr class="my-5">
 
+    <!-- Box Breathing -->
     <div id="box" class="exercise-section mb-5">
       <div class="row align-items-center">
         <div class="col-md-6 order-md-2">
@@ -71,6 +73,7 @@
 
     <hr class="my-5">
 
+    <!-- Deep Breathing -->
     <div id="deep" class="exercise-section mb-5">
       <div class="row align-items-center">
         <div class="col-md-6">
@@ -99,16 +102,17 @@
       </div>
     </div>
 
-    <div class="modal fade" id="timerModal" tabindex="-1">
+    <!-- Timer Modal -->
+    <div class="modal fade" id="timerModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exerciseTitle"></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-center">
             <div id="timerDisplay" class="timer-display">00:00</div>
-            <div id="instructionText" class="instruction-text mt-3"></div>
+            <div id="instructionText" class="instruction-text mt-3">Focus on your breath...</div>
             <button id="stopButton" class="btn btn-danger mt-3" onclick="stopExercise()">
               <i class="bi bi-stop-circle"></i> Stop
             </button>
@@ -117,19 +121,20 @@
       </div>
     </div>
 
-    <div class="modal fade" id="completionModal" tabindex="-1">
+    <!-- Completion Modal -->
+    <div class="modal fade" id="completionModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Exercise Complete!</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <p class="text-center">How are you feeling?</p>
             <form id="sessionForm">
               <input type="hidden" id="exerciseType" name="exerciseType">
               <input type="hidden" id="duration" name="duration">
-              
+
               <div class="mb-3">
                 <label class="form-label">Mood</label>
                 <select class="form-select" name="mood" required>
@@ -141,28 +146,15 @@
                   <option value="Stressed">😰 Still Stressed</option>
                 </select>
               </div>
-              
+
               <div class="mb-3">
                 <label class="form-label">Notes (optional)</label>
                 <textarea class="form-control" name="notes" rows="3"></textarea>
               </div>
-              
+
               <button type="submit" class="btn btn-primary w-100">Save Session</button>
             </form>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row row-cols-1 row-cols-md-2 g-4 equal-cols">
-      <div class="col">
-        <div class="exercise-card h-100 animate-on-scroll">
-          <!-- contenido de breathing circle -->
-        </div>
-      </div>
-      <div class="col">
-        <div class="exercise-card h-100 animate-on-scroll">
-          <!-- contenido de breathing square -->
         </div>
       </div>
     </div>

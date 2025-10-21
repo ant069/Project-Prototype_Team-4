@@ -1,153 +1,117 @@
-let exerciseTimer;
-let exerciseStartTime;
-let currentExercise;
-let currentDuration;
+let timerInterval = null;
+let currentExercise = null;
+let startTime = null;
+let remaining = 0;
 
-const timerModal = new bootstrap.Modal(document.getElementById('timerModal'));
-const completionModal = new bootstrap.Modal(document.getElementById('completionModal'));
-
-function startExercise(exerciseName, totalSeconds) {
+function startExercise(exerciseName, seconds) {
+  // Inicializa estado
+  clearInterval(timerInterval);
   currentExercise = exerciseName;
-  currentDuration = Math.floor(totalSeconds / 60);
-  exerciseStartTime = Date.now();
-  
-  document.getElementById('exerciseTitle').textContent = exerciseName;
-  document.getElementById('timerDisplay').textContent = formatTime(totalSeconds);
-  
-  timerModal.show();
-  
-  let remainingSeconds = totalSeconds;
-  
-  exerciseTimer = setInterval(() => {
-    remainingSeconds--;
-    document.getElementById('timerDisplay').textContent = formatTime(remainingSeconds);
-    
-    updateInstruction(exerciseName, remainingSeconds, totalSeconds);
-    
-    if (remainingSeconds <= 0) {
-      stopExercise();
-      timerModal.hide();
-      showCompletionForm();
-    }
-  }, 1000);
-}
+  startTime = Date.now();
+  remaining = seconds;
 
-function updateInstruction(exerciseName, remaining, total) {
-  const instructionEl = document.getElementById('instructionText');
-  
-  if (exerciseName === '4-7-8') {
-    const cycle = 19;
-    const position = remaining % cycle;
-    
-    if (position >= 15) {
-      instructionEl.textContent = 'Inhale through nose (4s)';
-    } else if (position >= 8) {
-      instructionEl.textContent = 'Hold your breath (7s)';
-    } else {
-      instructionEl.textContent = 'Exhale through mouth (8s)';
-    }
-  } else if (exerciseName === 'Box Breathing') {
-    const cycle = 16;
-    const position = remaining % cycle;
-    
-    if (position >= 12) {
-      instructionEl.textContent = 'Breathe in (4s)';
-    } else if (position >= 8) {
-      instructionEl.textContent = 'Hold (4s)';
-    } else if (position >= 4) {
-      instructionEl.textContent = 'Breathe out (4s)';
-    } else {
-      instructionEl.textContent = 'Hold empty (4s)';
-    }
-  } else if (exerciseName === 'Deep Breathing') {
-    const cycle = 10;
-    const position = remaining % cycle;
-    
-    if (position >= 5) {
-      instructionEl.textContent = 'Breathe in slowly (5s)';
-    } else {
-      instructionEl.textContent = 'Breathe out slowly (5s)';
+  // Actualiza UI
+  const titleEl = document.getElementById('exerciseTitle');
+  const timerEl = document.getElementById('timerDisplay');
+  const instrEl = document.getElementById('instructionText');
+  titleEl.textContent = exerciseName;
+  timerEl.textContent = formatTime(remaining);
+  instrEl.textContent = getInstruction(exerciseName, seconds);
+
+  // Abre modal y arranca timer
+  const timerModal = new bootstrap.Modal(document.getElementById('timerModal'));
+  timerModal.show();
+
+  function tick() {
+    remaining -= 1;
+    timerEl.textContent = formatTime(Math.max(remaining, 0));
+
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+      timerModal.hide();
+      const minutes = Math.max(1, Math.round((Date.now() - startTime) / 60000));
+      showCompletionModal(currentExercise, minutes);
     }
   }
+
+  tick();
+  timerInterval = setInterval(tick, 1000);
 }
 
 function stopExercise() {
-  clearInterval(exerciseTimer);
-  exerciseTimer = null;
+  clearInterval(timerInterval);
+  const tm = bootstrap.Modal.getInstance(document.getElementById('timerModal'));
+  if (tm) tm.hide();
+
+  // Si hubo progreso, ofrecer guardar
+  if (currentExercise && startTime) {
+    const minutes = Math.max(1, Math.round((Date.now() - startTime) / 60000));
+    showCompletionModal(currentExercise, minutes);
+  }
+
+  // Reset
+  remaining = 0;
 }
 
-function formatTime(seconds) {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+function showCompletionModal(exerciseName, durationMinutes) {
+  document.getElementById('exerciseType').value = exerciseName;
+  document.getElementById('duration').value = durationMinutes;
+
+  const cm = new bootstrap.Modal(document.getElementById('completionModal'));
+  cm.show();
 }
 
-function showCompletionForm() {
-  document.getElementById('exerciseType').value = currentExercise;
-  document.getElementById('duration').value = currentDuration;
-  completionModal.show();
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
 }
 
-document.getElementById('sessionForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData);
-  
-  try {
-    const response = await fetch('/api/sessions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    
-    const result = await response.json();
-    
-    if (result.success) {
-      completionModal.hide();
-      showSuccessMessage('Session saved successfully!');
-      e.target.reset();
-    } else {
-      showErrorMessage(result.error || 'Failed to save session');
+function getInstruction(name, seconds) {
+  if (name.includes('4-7-8')) return 'Inhale 4s • Hold 7s • Exhale 8s';
+  if (name.includes('Box')) return 'Inhale 4s • Hold 4s • Exhale 4s • Hold 4s';
+  if (name.includes('Deep')) return 'Inhale 5s • Exhale 5s';
+  return 'Focus on your breath...';
+}
+
+// Guardar sesión al enviar el formulario del modal
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('sessionForm');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const data = {
+      exerciseType: form.exerciseType.value,
+      duration: parseInt(form.duration.value, 10),
+      mood: form.mood.value,
+      notes: form.notes.value || ''
+    };
+
+    try {
+      const res = await fetch('/api/sessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const payload = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        bootstrap.Modal.getInstance(document.getElementById('completionModal')).hide();
+        alert('Session saved! Check your tracker.');
+        form.reset();
+        // Reset estado
+        currentExercise = null;
+        startTime = null;
+        remaining = 0;
+      } else {
+        alert('Failed to save session: ' + (payload.error || res.statusText));
+      }
+    } catch (err) {
+      console.error('Error saving session:', err);
+      alert('Error saving session. Please try again.');
     }
-  } catch (error) {
-    console.error('Error:', error);
-    showErrorMessage('Network error. Please try again.');
-  }
-});
-
-function showSuccessMessage(message) {
-  const alertDiv = document.createElement('div');
-  alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
-  alertDiv.style.zIndex = '9999';
-  alertDiv.innerHTML = `
-    ${message}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  `;
-  document.body.appendChild(alertDiv);
-  
-  setTimeout(() => {
-    alertDiv.remove();
-  }, 5000);
-}
-
-function showErrorMessage(message) {
-  const alertDiv = document.createElement('div');
-  alertDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
-  alertDiv.style.zIndex = '9999';
-  alertDiv.innerHTML = `
-    ${message}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  `;
-  document.body.appendChild(alertDiv);
-  
-  setTimeout(() => {
-    alertDiv.remove();
-  }, 5000);
-}
-
-document.getElementById('timerModal').addEventListener('hidden.bs.modal', () => {
-  if (exerciseTimer) {
-    stopExercise();
-  }
+  });
 });
