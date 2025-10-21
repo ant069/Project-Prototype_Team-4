@@ -30,18 +30,29 @@
   <section id="stats" class="py-5 bg-light">
     <div class="container">
       <div class="row text-center">
-        <div class="col-md-4">
-          <div class="stat-card card-3d animate-on-scroll">
-            <i class="bi bi-clock-history display-4 text-primary mb-3"></i>
-            <h3 data-count="<%= stats.totalSessions %>"><%= stats.totalSessions %></h3>
-            <p class="text-muted">Total Sessions</p>
+        <div class="row row-cols-1 row-cols-md-3 g-4 equal-cols">
+          <div class="col">
+            <div class="stat-card card-3d animate-on-scroll h-100">
+              <i class="bi bi-clock-history text-primary"></i>
+              <h3><span data-count="<%= stats.totalSessions %>"><%= stats.totalSessions %></span></h3>
+              <p class="text-muted">Total Sessions</p>
+            </div>
           </div>
-        </div>
-        <div class="col-md-4 mb-3">
-          <div class="stat-card p-4 animate-slide-up" style="animation-delay: 0.1s">
-            <i class="bi bi-hourglass-split display-4 text-success mb-3"></i>
-            <h3 data-count="<%= stats.totalMinutes %>"><%= stats.totalMinutes %> min</h3>
-            <p class="text-muted">Time Practiced</p>
+
+          <div class="col">
+            <div class="stat-card card-3d animate-on-scroll h-100">
+              <i class="bi bi-hourglass-split text-success"></i>
+              <h3><span data-count="<%= stats.totalMinutes %>"><%= stats.totalMinutes %></span> min</h3>
+              <p class="text-muted">Time Practiced</p>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="stat-card card-3d animate-on-scroll h-100">
+              <i class="bi bi-fire text-danger"></i>
+              <h3><span data-count="<%= stats.currentStreak %>"><%= stats.currentStreak %></span> days</h3>
+              <p class="text-muted">Current Streak</p>
+            </div>
           </div>
         </div>
       </div>
