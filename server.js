@@ -74,7 +74,7 @@ app.get('/', async (req, res) => {
     
     const stats = {
       totalSessions: allSessions.length,
-      totalMinutes: totalMinutes,
+      totalMinutes,
       currentStreak: allSessions.length > 0 ? Math.ceil(allSessions.length / 7) : 0
     };
     
