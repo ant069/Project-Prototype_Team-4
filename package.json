@@ -4,7 +4,8 @@
   "description": "Plataforma de salud mental con ejercicios de respiracion",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [
     "mental-health",
@@ -15,8 +16,13 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
+    "mongoose": "^8.0.0",
     "ejs": "^3.1.9",
-    "express-session": "^1.17.3"
+    "express-session": "^1.17.3",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   },
   "engines": {
     "node": ">=18.0.0"
