@@ -68,10 +68,16 @@ app.get('/', async (req, res) => {
     const recentSessions = await Session.find({ userId: req.session.userId })
       .sort({ createdAt: -1 })
       .limit(5);
-    res.render('index', { recentSessions });
+    res.render('index', { 
+      recentSessions,
+      message: req.query.message || null 
+    });
   } catch (error) {
     console.error('Error loading home:', error);
-    res.render('index', { recentSessions: [] });
+    res.render('index', { 
+      recentSessions: [],
+      message: null 
+    });
   }
 });
 
