@@ -137,7 +137,11 @@ app.post('/api/sessions', async (req, res) => {
 });
 
 app.get('/resources', async (req, res) => {
-  res.render('resources');
+  const quote = {
+    q: "Peace comes from within. Do not seek it without.",
+    a: "Buddha"
+  };
+  res.render('resources', { quote });
 });
 
 app.get('/feedback', (req, res) => {
