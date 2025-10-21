@@ -2,12 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mindcare';
+const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('✅ MongoDB Connected'))
@@ -44,44 +44,34 @@ app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET || 'mindcare-secret-2025',
   resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 }
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: MONGODB_URI,
+    touchAfter: 24 * 3600
+  }),
+  cookie: { 
+    maxAge: 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true
+  }
 }));
 
 app.use((req, res, next) => {
   if (!req.session.userId) {
-    req.session.userId = 'user_' + Date.now() + Math.random().toString(36).substr(2, 9);
+    req.session.userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
   next();
 });
 
 app.get('/', async (req, res) => {
   try {
-    const userSessions = await Session.find({ userId: req.session.userId })
+    const recentSessions = await Session.find({ userId: req.session.userId })
       .sort({ createdAt: -1 })
       .limit(5);
-    
-    const stats = await Session.aggregate([
-      { $match: { userId: req.session.userId } },
-      { $group: {
-        _id: null,
-        totalSessions: { $sum: 1 },
-        totalMinutes: { $sum: '$duration' }
-      }}
-    ]);
-    
-    res.render('index', {
-      recentSessions: userSessions,
-      stats: stats[0] || { totalSessions: 0, totalMinutes: 0 },
-      message: req.query.message
-    });
+    res.render('index', { recentSessions });
   } catch (error) {
     console.error('Error loading home:', error);
-    res.render('index', {
-      recentSessions: [],
-      stats: { totalSessions: 0, totalMinutes: 0 },
-      message: null
-    });
+    res.render('index', { recentSessions: [] });
   }
 });
 
@@ -91,10 +81,9 @@ app.get('/exercises', (req, res) => {
 
 app.get('/tracker', async (req, res) => {
   try {
-    const userSessions = await Session.find({ userId: req.session.userId })
+    const sessions = await Session.find({ userId: req.session.userId })
       .sort({ createdAt: -1 });
-    
-    res.render('tracker', { sessions: userSessions });
+    res.render('tracker', { sessions });
   } catch (error) {
     console.error('Error loading tracker:', error);
     res.render('tracker', { sessions: [] });
@@ -106,24 +95,13 @@ app.post('/api/sessions', async (req, res) => {
     const { exerciseType, duration, mood, notes } = req.body;
     
     if (!exerciseType || !duration || !mood) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Faltan campos requeridos' 
-      });
-    }
-
-    const durationNum = parseInt(duration);
-    if (isNaN(durationNum) || durationNum < 1 || durationNum > 120) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'La duración debe estar entre 1 y 120 minutos' 
-      });
+      return res.status(400).json({ error: 'Missing required fields' });
     }
 
     const newSession = new Session({
       userId: req.session.userId,
       exerciseType,
-      duration: durationNum,
+      duration: parseInt(duration),
       mood,
       notes: notes || ''
     });
@@ -132,38 +110,16 @@ app.post('/api/sessions', async (req, res) => {
     res.json({ success: true, session: newSession });
   } catch (error) {
     console.error('Error saving session:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Error al guardar la sesión' 
-    });
+    res.status(500).json({ error: 'Failed to save session' });
   }
 });
 
 app.get('/resources', async (req, res) => {
-  let quote = { 
-    q: 'Peace comes from within. Do not seek it without.', 
-    a: 'Buddha' 
-  };
-  
-  try {
-    const response = await fetch('https://zenquotes.io/api/random');
-    const data = await response.json();
-    
-    if (data && data[0]) {
-      quote = { 
-        q: data[0].q, 
-        a: data[0].a 
-      };
-    }
-  } catch (error) {
-    console.log('API unavailable, using fallback quote');
-  }
-  
-  res.render('resources', { quote });
+  res.render('resources');
 });
 
 app.get('/feedback', (req, res) => {
-  res.render('feedback', { success: req.query.success });
+  res.render('feedback');
 });
 
 app.post('/api/feedback', async (req, res) => {
@@ -171,34 +127,16 @@ app.post('/api/feedback', async (req, res) => {
     const { name, email, message } = req.body;
     
     if (!name || !email || !message) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Todos los campos son requeridos' 
-      });
+      return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Formato de email inválido' 
-      });
-    }
-
-    const newFeedback = new Feedback({ 
-      name: name.trim(), 
-      email: email.trim(), 
-      message: message.trim() 
-    });
+    const feedback = new Feedback({ name, email, message });
+    await feedback.save();
     
-    await newFeedback.save();
     res.json({ success: true });
   } catch (error) {
     console.error('Error saving feedback:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Error al enviar el feedback' 
-    });
+    res.status(500).json({ error: 'Failed to save feedback' });
   }
 });
 
@@ -210,19 +148,13 @@ app.delete('/api/sessions/:id', async (req, res) => {
     });
     
     if (!session) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'Sesión no encontrada' 
-      });
+      return res.status(404).json({ error: 'Session not found' });
     }
     
     res.json({ success: true });
   } catch (error) {
     console.error('Error deleting session:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Error al eliminar la sesión' 
-    });
+    res.status(500).json({ error: 'Failed to delete session' });
   }
 });
 
@@ -231,10 +163,10 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error('Server Error:', err);
-  res.status(500).send('Error interno del servidor');
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 MindCare ejecutándose en http://localhost:${PORT}`);
 });
