@@ -142,7 +142,9 @@ app.get('/resources', async (req, res) => {
 });
 
 app.get('/feedback', (req, res) => {
-  res.render('feedback');
+  res.render('feedback', {
+    success: req.query.success || null
+  });
 });
 
 app.post('/api/feedback', async (req, res) => {
