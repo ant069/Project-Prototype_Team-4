@@ -68,15 +68,32 @@ app.get('/', async (req, res) => {
     const recentSessions = await Session.find({ userId: req.session.userId })
       .sort({ createdAt: -1 })
       .limit(5);
+    
+    // Calcula las estadísticas
+    const allSessions = await Session.find({ userId: req.session.userId });
+    const totalMinutes = allSessions.reduce((sum, session) => sum + session.duration, 0);
+    
+    const stats = {
+      totalSessions: allSessions.length,
+      totalMinutes: totalMinutes,
+      currentStreak: allSessions.length > 0 ? Math.ceil(allSessions.length / 7) : 0
+    };
+    
     res.render('index', { 
       recentSessions,
-      message: req.query.message || null 
+      message: req.query.message || null,
+      stats: stats
     });
   } catch (error) {
     console.error('Error loading home:', error);
     res.render('index', { 
       recentSessions: [],
-      message: null 
+      message: null,
+      stats: {
+        totalSessions: 0,
+        totalMinutes: 0,
+        currentStreak: 0
+      }
     });
   }
 });
