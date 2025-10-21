@@ -69,7 +69,6 @@ app.get('/', async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(5);
     
-    // Calcula las estadísticas
     const allSessions = await Session.find({ userId: req.session.userId });
     const totalMinutes = allSessions.reduce((sum, session) => sum + session.duration, 0);
     
@@ -195,3 +194,16 @@ app.use((err, req, res, next) => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 MindCare ejecutándose en http://localhost:${PORT}`);
 });
+
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1); 
+}
+
+app.use((req, res, next) => {
+  
+  res.locals.message = res.locals.message ?? null;
+  res.locals.stats = res.locals.stats ?? { totalSessions: 0, totalMinutes: 0, currentStreak: 0 };
+  next();
+});
+
+
