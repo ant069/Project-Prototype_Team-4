@@ -1,51 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const animateOnScroll = () => {
-    const elements = document.querySelectorAll('.animate-fade-in, .animate-slide-up');
-    
-    elements.forEach(el => {
-      const rect = el.getBoundingClientRect();
-      const isVisible = rect.top < window.innerHeight - 100;
-      
-      if (isVisible) {
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-      }
-    });
-  };
+  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const initAnimations = () => {
-    const elements = document.querySelectorAll('.animate-fade-in, .animate-slide-up');
-    elements.forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(30px)';
-      el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-    });
-  };
+  // Elementos a animar (puedes añadir más selectores)
+  const targets = document.querySelectorAll(
+    '.animate-on-scroll, .stat-card, .exercise-card, .feature-card, .resource-card, .recent-session-card'
+  );
 
-  initAnimations();
-  animateOnScroll();
-  
-  window.addEventListener('scroll', animateOnScroll);
+  if (prefersReduce) {
+    targets.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
 
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      el.classList.add('is-visible', 'animate-slide-up'); // usa tus keyframes existentes
+      io.unobserve(el);
     });
+  }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+
+  targets.forEach(el => {
+    el.classList.add('animate-on-scroll');
+    io.observe(el);
   });
 
-  const navLinks = document.querySelectorAll('.nav-link');
-  const currentPath = window.location.pathname;
-  
-  navLinks.forEach(link => {
-    if (link.getAttribute('href') === currentPath) {
-      link.classList.add('active');
-    }
+  // Counter-up opcional para elementos con data-count
+  const counters = document.querySelectorAll('[data-count]');
+  counters.forEach(el => {
+    const end = parseInt(el.getAttribute('data-count'), 10);
+    if (Number.isNaN(end)) return;
+    let start = 0;
+    const duration = 800;
+    const t0 = performance.now();
+    const step = (t) => {
+      const p = Math.min((t - t0) / duration, 1);
+      el.textContent = Math.floor(start + (end - start) * p);
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
   });
 });

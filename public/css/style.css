@@ -64,7 +64,8 @@ h1, h2, h3, h4, h5 {
 }
 
 .exercise-card:hover {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.15);
 }
 
 .exercise-icon {
@@ -112,8 +113,8 @@ h1, h2, h3, h4, h5 {
 }
 
 .stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.15);
 }
 
 .feature-card {
@@ -136,7 +137,8 @@ h1, h2, h3, h4, h5 {
 }
 
 .recent-session-card:hover {
-  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.15);
 }
 
 .breathing-circle {
@@ -152,17 +154,9 @@ h1, h2, h3, h4, h5 {
   transition: transform 0.3s ease;
 }
 
-.breathing-circle.inhale {
-  animation: breatheIn 4s ease-in-out;
-}
-
-.breathing-circle.hold {
-  animation: hold 4s ease-in-out;
-}
-
-.breathing-circle.exhale {
-  animation: breatheOut 4s ease-in-out;
-}
+.breathing-circle.inhale { animation: breatheIn 4s ease-in-out; }
+.breathing-circle.hold   { animation: hold 4s ease-in-out; }
+.breathing-circle.exhale { animation: breatheOut 4s ease-in-out; }
 
 .breathing-square {
   width: 300px;
@@ -176,9 +170,7 @@ h1, h2, h3, h4, h5 {
   border-radius: 10px;
 }
 
-.breathing-square.box-animate {
-  animation: boxBreath 16s ease-in-out infinite;
-}
+.breathing-square.box-animate { animation: boxBreath 16s ease-in-out infinite; }
 
 .circle-text, .square-text {
   color: white;
@@ -199,9 +191,7 @@ h1, h2, h3, h4, h5 {
   font-weight: 500;
 }
 
-.exercise-section {
-  padding: 40px 0;
-}
+.exercise-section { padding: 40px 0; }
 
 .instructions ol {
   text-align: left;
@@ -219,13 +209,9 @@ h1, h2, h3, h4, h5 {
   border-radius: 15px;
 }
 
-footer.footer {
-  background: linear-gradient(90deg, var(--primary), var(--success));
-}
+footer.footer { background: linear-gradient(90deg, var(--primary), var(--success)); }
 
-.footer a:hover {
-  opacity: 0.8;
-}
+.footer a:hover { opacity: 0.8; }
 
 .social-icons i {
   font-size: 1.5rem;
@@ -233,123 +219,58 @@ footer.footer {
   transition: transform 0.3s ease;
 }
 
-.social-icons i:hover {
-  transform: scale(1.2);
-}
+.social-icons i:hover { transform: scale(1.2); }
 
-.hover-lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.hover-lift:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-}
+.hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.hover-lift:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
 
 .btn {
   transition: all 0.3s ease;
   border-radius: 25px;
   padding: 10px 30px;
 }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+.navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+.navbar-brand { font-weight: 700; font-size: 1.5rem; }
 
-.navbar {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-}
+.nav-link { transition: color 0.3s ease; font-weight: 500; }
+.nav-link:hover { color: #fff !important; opacity: 0.8; }
 
-.navbar-brand {
-  font-weight: 700;
-  font-size: 1.5rem;
-}
 
-.nav-link {
-  transition: color 0.3s ease;
-  font-weight: 500;
-}
+@keyframes slideUp { from {opacity:0; transform: translateY(18px)} to {opacity:1; transform:none} }
+@keyframes fadeIn  { from {opacity:0} to {opacity:1} }
+@keyframes popIn   { 0% {transform: scale(.9); opacity:0} 100% {transform: scale(1); opacity:1} }
+@keyframes floatY  { 0%,100% {transform: translateY(0)} 50% {transform: translateY(-8px)} }
+@keyframes glow    { 0%,100% {box-shadow: 0 0 0 rgba(0,123,255,0)} 50% {box-shadow: 0 0 24px rgba(0,123,255,.45)} }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-.nav-link:hover {
-  color: #fff !important;
-  opacity: 0.8;
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Slide up genérico para entrar con animación */
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.animate-slide-up { animation: slideUp .5s ease-out both; }
-
-/* Respiración (coincide con tus clases .inhale/.hold/.exhale) */
-@keyframes breatheIn {
-  from { transform: scale(1);   }
-  to   { transform: scale(1.15); }
-}
-@keyframes hold {
-  from { transform: scale(1.15); }
-  to   { transform: scale(1.15); }
-}
-@keyframes breatheOut {
-  from { transform: scale(1.15); }
-  to   { transform: scale(1); }
-}
+@keyframes breatheIn  { from { transform: scale(1);    } to { transform: scale(1.15); } }
+@keyframes hold       { from { transform: scale(1.15); } to { transform: scale(1.15); } }
+@keyframes breatheOut { from { transform: scale(1.15); } to { transform: scale(1);    } }
 
 @keyframes boxBreath {
-  0%, 100% { transform: scale(1); }
-  25% { transform: scale(1.2); }
-  50% { transform: scale(1.2); }
-  75% { transform: scale(1); }
+  0%   { transform: scale(1);   }
+  25%  { transform: scale(1.05);}
+  50%  { transform: scale(1.1); }
+  75%  { transform: scale(1.05);}
+  100% { transform: scale(1);   }
 }
 
-.animate-fade-in {
-  animation: fadeInUp 0.8s ease-out;
+/* Helpers de animación */
+.animate-slide-up { animation: slideUp .5s ease-out both; }
+.animate-on-scroll { opacity: 0; }
+.animate-on-scroll.is-visible { opacity: 1; }
+
+/* Respeta accesibilidad: reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
 }
 
-.animate-slide-up {
-  animation: fadeInUp 0.8s ease-out;
-}
-
+/* Responsive */
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-  
-  .hero-subtitle {
-    font-size: 1.2rem;
-  }
-  
-  .breathing-circle, .breathing-square {
-    width: 250px;
-    height: 250px;
-  }
-  
-  .timer-display {
-    font-size: 3rem;
-  }
+  .hero-title { font-size: 2.5rem; }
+  .hero-subtitle { font-size: 1.2rem; }
+  .breathing-circle, .breathing-square { width: 250px; height: 250px; }
+  .timer-display { font-size: 3rem; }
 }
