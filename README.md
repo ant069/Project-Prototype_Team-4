@@ -1,296 +1,187 @@
-Dev Log Antonio Enriquez:
+# MindCare – Prototype + Beta
 
-Date: [09/09]
-Project: MindCare
+Live: https://mindcare-bw9t.onrender.com
 
-Goals for the documented session
+MindCare is a simple mindfulness app to practice breathing, log sessions, and send feedback. Built with Express + EJS + MongoDB Atlas and deployed on Render.
 
- Research how Bootstrap grid system works for responsive design
+## Stack
+- Node.js, Express, EJS
+- MongoDB Atlas + Mongoose + connect-mongo (sessions)
+- Bootstrap 5 + Bootstrap Icons
+- Custom CSS with animations (scroll reveal, breathing keyframes)
+- Render (deploy)
 
- Apply Bootstrap containers, rows, and columns in the prototype
+## Features
+- Responsive hero and navigation (Bootstrap)
+- Exercises: 4-7-8, Box Breathing, Deep Breathing (modals + timer)
+- Session logging: POST /api/sessions (type, duration, mood, notes)
+- Tracker: list and delete sessions
+- Home: statistics (Total Sessions, Time Practiced, Current Streak) with count-up
+- Feedback: form persisted in Mongo
+- Resources: view with dynamic quote
+- Accessibility: respects prefers-reduced-motion
 
- Contribute to the design of one section of the website
+## Main Routes
+- GET /, /exercises, /tracker, /resources, /feedback
+- POST /api/sessions, DELETE /api/sessions/:id
+- POST /api/feedback
 
- Ensure consistency in colors and layout
+## Models (summary)
+- Session: { userId, exerciseType, duration, mood, notes, createdAt }
+- Feedback: { name, email, message, createdAt }
+
+## Local Setup (Windows)
+1) Clone and install
+- git clone https://github.com/ant069/Project-Prototype_Team-4.git
+- cd Project-Prototype_Team-4
+- npm install
+
+2) .env variables
+- MONGODB_URI=your_atlas_uri
+- SESSION_SECRET=your_secret
+- NODE_ENV=development
+
+3) Run
+- npm run dev
+- Open http://localhost:3000
+
+Render notes
+- Do not define PORT in Render. Let Express use process.env.PORT.
+- Ensure Atlas Network Access allows 0.0.0.0/0.
+- Check logs for “✅ MongoDB Connected”.
+
+---
+
+## Dev Log: Antonio Enriquez
+
+Date: 20/10 – 21/10  
+Project: MindCare (Prototype + Beta)
+
+Goals
+- Finish responsive design with Bootstrap
+- Fix hero and card symmetry
+- Add animations and scroll reveal
+- Keep deploy stable on Render
 
 Tasks Completed
-
-Investigated Bootstrap documentation to understand the grid system.
-
-Learned how to use container, row, and col-md for layouts.
-
-Helped design part of the prototype by applying Bootstrap to structure sections.
-
-Suggested layout improvements for better responsiveness.
+- CSS cleanup (removed merge markers, deduplicated keyframes).
+- Hero gap removed (no global body padding-top).
+- Equalized card heights (stats and exercises) via equal-cols utilities.
+- Scroll reveal with IntersectionObserver (public/js/main.js) and stat counter.
+- Restored third stat card (Current Streak).
 
 Use of Gen AI
-
-Tool used: ChatGPT
-
-Purpose: Asked specific questions about Bootstrap syntax and best practices.
-
-Example Prompt: “How do I use Bootstrap grid system to make a two-column layout?”
-
-Reflection: It clarified concepts faster than just reading documentation, but I still verified everything in the official Bootstrap docs.
+- Quick questions on git conflicts and keyframes.
+- Generated CSS utilities and reveal pattern.
 
 What I Learned
-
-How Bootstrap helps build responsive websites without writing too much custom CSS.
-
-The difference between containers (container vs container-fluid).
-
-How columns resize depending on screen width using breakpoints (col-md, col-lg).
-
-The importance of consistency in spacing and alignment.
+- Fine control of Bootstrap grid (row-cols, h-100, g-4) for symmetry.
+- Animation best practices and prefers-reduced-motion.
+- Rebase/cherry-pick flow and safe push (--force-with-lease).
 
 Challenges & Bugs
+- ❌ style.css conflicts and HTML inside CSS.
+- ✅ Fixed by cleaning markers and closing missing @keyframes.
+- ❌ Hero gap due to body padding-top.
+- ✅ Fixed by applying padding only to non-hero sections.
 
-❌ At first, I struggled to understand how columns stack on smaller screens.
-✅ Solved it by testing different breakpoints (col-12, col-md-6) in practice.
+---
 
-❌ Unsure about when to use rows vs. just columns.
-✅ Fixed it by checking Bootstrap examples and asking for clarification.
+## Dev Log: Gael Rodriguez
 
-Resources Used
-
-Bootstrap Documentation
-
-Class slides and notes on responsive design
-
-ChatGPT for clarifying Bootstrap concepts
-
-Next Steps
-
-Keep improving the layout of specific sections.
-
-Add placeholder content (text, icons, or images) for testing responsiveness.
-
-Work with the team to unify the color palette and card designs.
-
-Explore Bootstrap components (navbar, buttons, cards) for potential use.
-
-Personal Reflection
-
-Today I focused on learning Bootstrap and applying it to our prototype. At first, it felt a bit confusing, but once I practiced, I saw how powerful it is for creating responsive layouts quickly. Contributing to the design of the prototype helped me understand how theory translates into practice. Using AI for small doubts saved me time, but I made sure to really understand Bootstrap by checking the official docs. I feel more confident about working with Bootstrap in future sessions.
-
-Dev Log: Gael Rodriguez:
-
-Date: 09/09
-
+Date: 20/10  
 Project: MindCare
 
-Goals for the documented session
-
- Build the base structure of the website
-
- Create a clear and organized HTML skeleton
-
- Implement navigation (header and footer)
-
- Design reusable components for content
+Goals
+- Reusable EJS views
+- Consistent navbar, footer, and sections
 
 Tasks Completed
-
-Created the HTML skeleton with the main sections of the site.
-
-Implemented a header with navigation and a footer for clarity and ease of use.
-
-Designed reusable cards for breathing exercises and daily tips to maintain consistency.
-
-Ensured the layout remained clean and organized across sections.
+- Navbar/footer partials; included in all views.
+- Grid adjustments in Home and Exercises.
+- Cleaned resources.ejs (pure HTML/EJS, no server JS).
 
 Use of Gen AI
-
-Tool used: ChatGPT
-
-Purpose: Consulted for doubts regarding Bootstrap structure and best practices.
-
-Reflection: It was useful to confirm correct syntax, but the structure was coded directly by me.
+- EJS syntax and include patterns.
 
 What I Learned
-
-How to organize a webpage with a clear skeleton before adding detailed design.
-
-The importance of reusable components (like cards) for consistent layout.
-
-How navigation and footer elements improve user experience.
-
-The balance between structure and design in web development.
+- Separation of concerns (view vs server).
+- Keeping visual consistency with Bootstrap utilities.
 
 Challenges & Bugs
+- ❌ “Something broke” in Resources due to server JS inside EJS.
+- ✅ Moved logic to server.js and passed quote via render.
 
-❌ Unsure how to keep sections visually consistent while reusing elements.
-✅ Solved by using Bootstrap classes and external CSS styling.
+---
 
-Resources Used
+## Dev Log: Diego Arias
 
-Bootstrap documentation (layout and cards)
-
-Class notes on HTML5 and responsive design
-
-Team feedback on structure
-
-Next Steps
-
-Collaborate on improving the interface with color palette and typography.
-
-Add placeholder content for testing responsiveness.
-
-Explore possible dynamic elements for future iterations.
-
-Personal Reflection
-
-“This session I focused on the structural foundation of our website. Setting up the skeleton, header, and footer gave me a clearer idea of how everything connects. I also enjoyed working on reusable cards, which made the design feel cleaner. While my focus was the base, I’m excited to later explore interface improvements and even some dynamic features.”
-
-Dev Log: Diego Arias:
-Date: 09/09
-
-Project:  MindCare
-
-Goals for the documented session
-
- Define the navigation flow of the website
-
- Research suitable design elements (colors, layout, sections)
-
- Contribute to interface design for the prototype
-
- Explore possibilities for the internal structure of the project
-
-Tasks Completed
-
-Investigated what elements would be appropriate to add to the page.
-
-Defined the homepage design with navigation to exercises, breathing tips, and resources.
-
-Designed the interface to include scrolling sections with clear spaces for content.
-
-Selected blue and green as the main colors to reflect peace, calmness, breathing, and oxygen.
-
-Applied white backgrounds to reinforce a calm ambience when users visit the site.
-
-Focused on interface design while beginning to consider internal structure possibilities.
-
-Use of Gen AI
-
-Tool used: ChatGPT
-
-Purpose: Asked questions related to Bootstrap layout and best practices.
-
-Reflection: Helped clarify doubts about responsive design but the design work was created directly by me.
-
-What I Learned
-
-The importance of navigation flow in user experience.
-
-How colors can influence the mood and perception of a website.
-
-The balance between simplicity (calm ambience) and functionality.
-
-Early understanding of how the structure (skeleton) supports the final product.
-
-Challenges & Bugs
-
-❌ Difficulty deciding which colors would look professional but also reflect calmness.
-✅ Solved by selecting subtle shades of blue and green and balancing with white.
-
-Resources Used
-
-Bootstrap documentation (for layout research)
-
-Color psychology references for UI design
-
-Class notes on HTML structure
-
-Next Steps
-
-Work more on the internal structure of the website.
-
-Test the layout on both wide and mobile views.
-
-Collaborate with the team to integrate interface with content.
-
-Personal Reflection
-
-“This session allowed me to focus on design decisions that directly affect how users will experience our site. Researching colors and navigation gave me a better understanding of how design communicates calmness. While I worked mostly on the interface, I am motivated to also explore the internal structure of the project in future sessions.”
-
-Dev Log as a Group: 
-
-Date: [09/09]
+Date: 21/10  
 Project: MindCare
 
-Goals for the documented session
-
- Create the base structure of the website using HTML5
-
- Apply Bootstrap grid system for a responsive layout
-
- Organize files properly with an external CSS file
-
- Define a consistent design style and reusable elements (cards, sections)
-
- Assign roles among team members (research, design, structure)
+Goals
+- Connect MongoDB and persist sessions/feedback
+- Finalize exercises flow (timer + modal)
 
 Tasks Completed
-
-Built the index.html file with main sections: Home, Breathing Exercises, Tips, Resources, Footer.
-
-Added Bootstrap containers, rows, and columns to ensure the site adapts to mobile and desktop.
-
-Created an external style.css file for consistent design.
-
-Designed navigation bar and footer to unify the prototype.
-
-Defined the color palette and layout structure for the project.
-
-Distributed tasks among team members (e.g., Bootstrap research, CSS styling, section design).
+- Mongoose connection + session store (connect-mongo).
+- REST routes: POST/DELETE sessions, POST feedback.
+- exercises.js: timer, safe stop, and save-session modal.
 
 Use of Gen AI
+- Fetch/JSON patterns and error handling.
 
-Tool used: ChatGPT
+What I Learned
+- Minimal validation in endpoints and 400/500 handling.
+- How to compute basic stats and prepare data for EJS.
 
-Purpose: Clarify technical doubts while working with Bootstrap and responsive design.
+Challenges & Bugs
+- ❌ “Failed to save session” due to incomplete payload.
+- ✅ Send { exerciseType, duration, mood, notes } correctly.
 
-Example Prompt: “What is the difference between container and container-fluid in Bootstrap?”
+---
 
-Reflection: It helped resolve doubts quickly, but most of the work was developed directly by the team.
+## Dev Log (Group)
+
+Date: 20/10 – 21/10  
+Project: MindCare
+
+Goals
+- Complete Prototype + Beta with production deploy
+- Ensure all views work correctly
+
+Tasks Completed
+- Final design with animations and hover states.
+- Stats with count-up and visual symmetry.
+- Exercises with modals, stop, and session saving.
+- Persistent feedback and stable Resources with quote.
+- Deploy on Render and log verification.
+
+Use of Gen AI
+- Accelerate git conflict resolution and CSS refactor.
+- Accessibility suggestions and micro-animations.
 
 What We Learned
-
-How to use Bootstrap’s grid system to make the site responsive.
-
-The benefits of separating CSS into an external file for organization.
-
-How to design reusable sections like cards for tips or exercises.
-
-Importance of a consistent layout for user experience.
+- Keep front/back separated; no server JS in EJS.
+- Minimize flicker and ensure symmetry with simple utilities.
+- Production flow: env vars, logs, and remote DB.
 
 Challenges & Bugs
-
-❌ Some confusion about how breakpoints (col-md, col-lg) affected layout.
-✅ Resolved by experimenting and checking official documentation.
-
-❌ Unsure if images should already be included at this prototype stage.
-✅ Decided to leave placeholders and focus on layout first.
-
-Resources Used
-
-Bootstrap Documentation
-
-Class notes on HTML5 and CSS basics
-
-ChatGPT for clarifying Bootstrap concepts
+- ❌ Complex rebase and detached HEAD.
+- ✅ Cherry-pick and safe push with --force-with-lease.
+- ❌ Card misalignment and hero gap.
+- ✅ Equal-cols + padding adjustments solved it.
 
 Next Steps
+- Confirm dialog before deleting a session (modal).
+- Simple chart in tracker (Chart.js).
+- Basic route tests (supertest).
 
-Add placeholder images/icons in certain sections.
+---
 
-Finalize text content for tips and exercises.
-
-Improve color palette and typography for better aesthetics.
-
-Explore Bootstrap components such as navbars, buttons, and cards.
-
-Group Reflection
-
-“As a team, we feel that we have established a solid foundation for the project. Everyone contributed by focusing on their assigned tasks, and the prototype is starting to take shape. Bootstrap seemed confusing at first, but by collaborating, checking documentation, and resolving doubts, we were able to make progress. We are confident about refining the design in the upcoming sessions.”
+## Changelog (highlights)
+- Fix: CSS conflicts and missing @keyframes braces.
+- Feat: main.js (reveal + count-up).
+- Feat: exercises.js (timer, stop, save session).
+- Fix: Resources without server JS in EJS.
+- Feat: 3rd stat card (Streak) and grid symmetry.
