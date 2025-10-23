@@ -310,6 +310,27 @@ footer.footer { background: linear-gradient(90deg, var(--primary), var(--success
 @media (max-width: 768px) {
   .hero-title { font-size: 2.5rem; }
   .hero-subtitle { font-size: 1.2rem; }
-  .breathing-circle, .breathing-square { width: 250px; height: 250px; }
-  .timer-display { font-size: 3rem; }
+  
+  /* Ocultar tercer stat en móvil */
+  .stat-card:nth-child(3) { display: none; }
+  
+  /* Stack exercises verticalmente */
+  .breathing-circle, .breathing-square { 
+    width: 250px; 
+    height: 250px; 
+  }
+  
+  /* Simplificar navbar */
+  .navbar-brand { font-size: 1.2rem; }
+  
+  /* Reducir padding en secciones */
+  main > section { padding: 2rem 0; }
+}
+
+@media (max-width: 576px) {
+  /* Ocultar notas en tracker móvil */
+  .recent-session-card .text-muted { display: none; }
+  
+  /* Botones más pequeños */
+  .btn { padding: 8px 20px; font-size: 0.9rem; }
 }

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,8 +33,16 @@ const feedbackSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+const userSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  password: { type: String, required: true },
+  name: { type: String, required: true, trim: true },
+  createdAt: { type: Date, default: Date.now }
+});
+
 const Session = mongoose.model('Session', sessionSchema);
 const Feedback = mongoose.model('Feedback', feedbackSchema);
+const User = mongoose.model('User', userSchema);
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -63,14 +72,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', async (req, res) => {
+// Home (solo sesiones del usuario autenticado)
+app.get('/', requireAuth, async (req, res) => {
   try {
     const recentSessions = await Session.find({ userId: req.session.userId })
       .sort({ createdAt: -1 })
       .limit(5);
     
     const allSessions = await Session.find({ userId: req.session.userId });
-    const totalMinutes = allSessions.reduce((sum, session) => sum + session.duration, 0);
+    const totalMinutes = allSessions.reduce((sum, s) => sum + s.duration, 0);
     
     const stats = {
       totalSessions: allSessions.length,
@@ -81,27 +91,22 @@ app.get('/', async (req, res) => {
     res.render('index', { 
       recentSessions,
       message: req.query.message || null,
-      stats: stats
+      stats,
+      userName: req.session.userName
     });
   } catch (error) {
     console.error('Error loading home:', error);
     res.render('index', { 
       recentSessions: [],
       message: null,
-      stats: {
-        totalSessions: 0,
-        totalMinutes: 0,
-        currentStreak: 0
-      }
+      stats: { totalSessions: 0, totalMinutes: 0, currentStreak: 0 },
+      userName: req.session.userName
     });
   }
 });
 
-app.get('/exercises', (req, res) => {
-  res.render('exercises');
-});
-
-app.get('/tracker', async (req, res) => {
+// Tracker (solo sesiones del usuario)
+app.get('/tracker', requireAuth, async (req, res) => {
   try {
     const sessions = await Session.find({ userId: req.session.userId })
       .sort({ createdAt: -1 });
@@ -110,6 +115,25 @@ app.get('/tracker', async (req, res) => {
     console.error('Error loading tracker:', error);
     res.render('tracker', { sessions: [] });
   }
+});
+
+// Exercises (protegido)
+app.get('/exercises', requireAuth, (req, res) => {
+  res.render('exercises');
+});
+
+// Resources (protegido)
+app.get('/resources', requireAuth, async (req, res) => {
+  const quote = {
+    q: "Peace comes from within. Do not seek it without.",
+    a: "Buddha"
+  };
+  res.render('resources', { quote });
+});
+
+// Feedback (protegido)
+app.get('/feedback', requireAuth, (req, res) => {
+  res.render('feedback', { success: req.query.success || null });
 });
 
 app.post('/api/sessions', async (req, res) => {
@@ -134,20 +158,6 @@ app.post('/api/sessions', async (req, res) => {
     console.error('Error saving session:', error);
     res.status(500).json({ error: 'Failed to save session' });
   }
-});
-
-app.get('/resources', async (req, res) => {
-  const quote = {
-    q: "Peace comes from within. Do not seek it without.",
-    a: "Buddha"
-  };
-  res.render('resources', { quote });
-});
-
-app.get('/feedback', (req, res) => {
-  res.render('feedback', {
-    success: req.query.success || null
-  });
 });
 
 app.post('/api/feedback', async (req, res) => {
@@ -186,6 +196,77 @@ app.delete('/api/sessions/:id', async (req, res) => {
   }
 });
 
+// Registro
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { email, password, name } = req.body;
+    
+    if (!email || !password || !name) {
+      return res.status(400).json({ error: 'All fields required' });
+    }
+    
+    const exists = await User.findOne({ email });
+    if (exists) {
+      return res.status(400).json({ error: 'Email already registered' });
+    }
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ email, password: hashedPassword, name });
+    await user.save();
+    
+    req.session.userId = user._id.toString();
+    req.session.userName = user.name;
+    
+    res.json({ success: true, user: { id: user._id, name: user.name, email: user.email } });
+  } catch (error) {
+    console.error('Register error:', error);
+    res.status(500).json({ error: 'Registration failed' });
+  }
+});
+
+// Login
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password required' });
+    }
+    
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    
+    req.session.userId = user._id.toString();
+    req.session.userName = user.name;
+    
+    res.json({ success: true, user: { id: user._id, name: user.name, email: user.email } });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+// Logout
+app.post('/api/auth/logout', (req, res) => {
+  req.session.destroy();
+  res.json({ success: true });
+});
+
+// Middleware: proteger rutas
+function requireAuth(req, res, next) {
+  if (!req.session.userId || req.session.userId.startsWith('user_')) {
+    return res.redirect('/login');
+  }
+  next();
+}
+
 app.use((req, res) => {
   res.status(404).render('404');
 });
@@ -208,6 +289,20 @@ app.use((req, res, next) => {
   res.locals.message = res.locals.message ?? null;
   res.locals.stats = res.locals.stats ?? { totalSessions: 0, totalMinutes: 0, currentStreak: 0 };
   next();
+});
+
+app.get('/login', (req, res) => {
+  if (req.session.userId && !req.session.userId.startsWith('user_')) {
+    return res.redirect('/');
+  }
+  res.render('login');
+});
+
+app.get('/register', (req, res) => {
+  if (req.session.userId && !req.session.userId.startsWith('user_')) {
+    return res.redirect('/');
+  }
+  res.render('register');
 });
 
 
