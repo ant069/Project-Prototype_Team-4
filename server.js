@@ -1,12 +1,24 @@
 require('dotenv').config();
-const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const path = require('path');
 const bcrypt = require('bcrypt');
-
+const express = require('express');
+const crypto = require('crypto');
 const app = express();
+
+// Debe ir ANTES de session() cuando usas secure cookies detrás de proxy (Render)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -44,12 +56,6 @@ const Session = mongoose.model('Session', sessionSchema);
 const Feedback = mongoose.model('Feedback', feedbackSchema);
 const User = mongoose.model('User', userSchema);
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-app.use(express.static('public'));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET || 'mindcare-secret-2025',
   resave: false,
@@ -58,61 +64,67 @@ app.use(session({
     mongoUrl: MONGODB_URI,
     touchAfter: 24 * 3600
   }),
-  cookie: { 
+  cookie: {
     maxAge: 24 * 60 * 60 * 1000,
     secure: process.env.NODE_ENV === 'production',
-    httpOnly: true
+    httpOnly: true,
+    sameSite: 'lax'
   }
 }));
 
+// Asignar un userId por navegador (guest) ANTES de usar Session en rutas
 app.use((req, res, next) => {
   if (!req.session.userId) {
-    req.session.userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    req.session.userId = `guest_${crypto.randomUUID()}`;
   }
   next();
 });
 
-// Home (solo sesiones del usuario autenticado)
+// Health (para Render)
+app.get('/health', (req, res) => res.json({ ok: true }));
+
+// Home con stats reales por usuario
 app.get('/', async (req, res) => {
   try {
-    // renderiza home; evita protegerla mientras pruebas
-    res.render('index', { recentSessions: [], message: null, stats: { totalSessions: 0, totalMinutes: 0, currentStreak: 0 } });
-  } catch (e) {
-    console.error(e);
-    res.render('index', { recentSessions: [], message: null, stats: { totalSessions: 0, totalMinutes: 0, currentStreak: 0 } });
-  }
-});
+    const recentSessions = await Session.find({ userId: req.session.userId })
+      .sort({ createdAt: -1 })
+      .limit(5);
 
-// Tracker (solo sesiones del usuario)
-app.get('/tracker', requireAuth, async (req, res) => {
-  try {
-    const sessions = await Session.find({ userId: req.session.userId })
-      .sort({ createdAt: -1 });
-    res.render('tracker', { sessions });
-  } catch (error) {
-    console.error('Error loading tracker:', error);
-    res.render('tracker', { sessions: [] });
+    const all = await Session.find({ userId: req.session.userId });
+    const totalMinutes = all.reduce((sum, s) => sum + s.duration, 0);
+    const stats = {
+      totalSessions: all.length,
+      totalMinutes,
+      currentStreak: all.length ? Math.ceil(all.length / 7) : 0
+    };
+
+    res.render('index', { recentSessions, message: null, stats });
+  } catch (e) {
+    console.error('Home error:', e);
+    res.render('index', { recentSessions: [], message: null, stats: { totalSessions: 0, totalMinutes: 0, currentStreak: 0 } });
   }
 });
 
 // Exercises (protegido)
-app.get('/exercises', requireAuth, (req, res) => {
-  res.render('exercises');
+app.get('/exercises', (req, res) => res.render('exercises'));
+
+// Tracker mostrando sesiones del usuario
+app.get('/tracker', async (req, res) => {
+  try {
+    const sessions = await Session.find({ userId: req.session.userId })
+      .sort({ createdAt: -1 });
+    res.render('tracker', { sessions });
+  } catch (e) {
+    console.error('Tracker error:', e);
+    res.render('tracker', { sessions: [] });
+  }
 });
 
 // Resources (protegido)
-app.get('/resources', requireAuth, async (req, res) => {
-  const quote = {
-    q: "Peace comes from within. Do not seek it without.",
-    a: "Buddha"
-  };
-  res.render('resources', { quote });
-});
+app.get('/resources', (req, res) => res.render('resources', { quote: { q: "Peace comes from within. Do not seek it without.", a: "Buddha" } }));
 
 // Feedback (protegido)
-app.get('/feedback', requireAuth, (req, res) => {
-  res.render('feedback', { success: req.query.success || null });
-});
+app.get('/feedback', (req, res) => res.render('feedback', { success: null }));
 
 app.post('/api/sessions', async (req, res) => {
   try {
@@ -237,33 +249,15 @@ app.post('/api/auth/logout', (req, res) => {
   res.json({ success: true });
 });
 
-// Middleware: proteger rutas
+// Middleware: proteger rutas (solo para usuarios registrados)
 function requireAuth(req, res, next) {
-  if (!req.session.userId || req.session.userId.startsWith('user_')) {
+  if (!req.session.userId || req.session.userId.startsWith('guest_')) {
     return res.redirect('/login');
   }
   next();
 }
 
-app.use((req, res) => {
-  res.status(404).render('404');
-});
-
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
-
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 1); 
-}
-
 app.use((req, res, next) => {
-  
   res.locals.message = res.locals.message ?? null;
   res.locals.stats = res.locals.stats ?? { totalSessions: 0, totalMinutes: 0, currentStreak: 0 };
   next();
@@ -281,6 +275,19 @@ app.get('/register', (req, res) => {
     return res.redirect('/');
   }
   res.render('register');
+});
+
+app.use((req, res) => {
+  res.status(404).render('404');
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 
