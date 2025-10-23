@@ -257,21 +257,24 @@ function requireAuth(req, res, next) {
   next();
 }
 
+// Exponer variables comunes a todas las vistas
 app.use((req, res, next) => {
+  res.locals.userName = req.session.userName || null; // <-- para navbar
   res.locals.message = res.locals.message ?? null;
   res.locals.stats = res.locals.stats ?? { totalSessions: 0, totalMinutes: 0, currentStreak: 0 };
   next();
 });
 
 app.get('/login', (req, res) => {
-  if (req.session.userId && !req.session.userId.startsWith('user_')) {
+  // Redirige si YA está autenticado (no guest_)
+  if (req.session.userId && !req.session.userId.startsWith('guest_')) {
     return res.redirect('/');
   }
   res.render('login');
 });
 
 app.get('/register', (req, res) => {
-  if (req.session.userId && !req.session.userId.startsWith('user_')) {
+  if (req.session.userId && !req.session.userId.startsWith('guest_')) {
     return res.redirect('/');
   }
   res.render('register');
