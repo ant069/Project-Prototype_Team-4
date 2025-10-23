@@ -308,29 +308,15 @@ footer.footer { background: linear-gradient(90deg, var(--primary), var(--success
 
 
 @media (max-width: 768px) {
-  .hero-title { font-size: 2.5rem; }
-  .hero-subtitle { font-size: 1.2rem; }
-  
-  /* Ocultar tercer stat en móvil */
-  .stat-card:nth-child(3) { display: none; }
-  
-  /* Stack exercises verticalmente */
-  .breathing-circle, .breathing-square { 
-    width: 250px; 
-    height: 250px; 
-  }
-  
-  /* Simplificar navbar */
-  .navbar-brand { font-size: 1.2rem; }
-  
-  /* Reducir padding en secciones */
+  .hero-title { font-size: 2.4rem; }
+  .hero-subtitle { font-size: 1.1rem; }
+  .breathing-circle, .breathing-square { width: 240px; height: 240px; }
+  /* Hide third stat on mobile to reduce crowding */
+  .stats-row > .col:nth-child(3) { display: none; }
   main > section { padding: 2rem 0; }
 }
-
 @media (max-width: 576px) {
-  /* Ocultar notas en tracker móvil */
+  .btn { padding: 8px 18px; font-size: .9rem; }
+  /* Hide long muted texts in compact cards */
   .recent-session-card .text-muted { display: none; }
-  
-  /* Botones más pequeños */
-  .btn { padding: 8px 20px; font-size: 0.9rem; }
 }
