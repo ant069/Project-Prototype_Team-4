@@ -23,9 +23,26 @@
         <li class="nav-item">
           <a class="nav-link" href="/feedback">Feedback</a>
         </li>
+        <% if (locals.userName) { %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <%= userName %>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+            </ul>
+          </li>
+        <% } %>
       </ul>
     </div>
   </div>
 </nav>
 
 <div style="height: 56px;"></div>
+
+<script>
+  async function logout() {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.href = '/login';
+  }
+</script>
