@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿#  MindCare - Mental Wellness Platform
 
 ![MongoDB](https://img.shields.io/badge/MongoDB-4.4-green?logo=mongodb)
@@ -30,19 +31,30 @@
 
 ---
 # ðŸ§˜ MindCare - Mental Wellness Platform
+=======
+# 🧘 MindCare - Mental Wellness Platform
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a
 
 **Live Demo:** https://mindcare-bw9t.onrender.com  
 **Repository:** https://github.com/ant069/Project-Prototype_Team-4
 
 ---
 
+<<<<<<< HEAD
 ## ðŸ“‹ Description
+=======
+## 📋 Description
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a
 
 MindCare is a professional mental wellness web platform built with the MERN stack (MongoDB, Express, React, Node.js). It offers scientifically validated breathing exercises, guided meditation, body scan, and personalized progress tracking to help users manage stress and improve mental wellbeing.
 
 ---
 
+<<<<<<< HEAD
 ## ðŸŽ¯ Objective
+=======
+## 🎯 Objective
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a
 
 Provide accessible, evidence-based tools to reduce stress, improve focus, and promote mental wellness through breathing techniques, mindfulness practices, and progress tracking.
 
@@ -83,6 +95,7 @@ Provide accessible, evidence-based tools to reduce stress, improve focus, and pr
 
 ---
 
+<<<<<<< HEAD
 
 ## 📸 Screenshots
 
@@ -101,6 +114,8 @@ Provide accessible, evidence-based tools to reduce stress, improve focus, and pr
 ### Meditation Tracker
 ![Tracker](docs/screenshots/tracker.png)
 *Track your meditation sessions and progress*
+=======
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a
 ##  Features
 
 ###  Authentication & User Management
@@ -354,7 +369,11 @@ Project-Prototype_Team-4/
 
 ### Team 4 - MindCare
 
+<<<<<<< HEAD
 **Diego Arias PÃ©rez** - Backend Developer & Database Architecture
+=======
+**Diego Arias Pérez** - Backend Developer & Database Architecture
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a
 - MongoDB schema design and implementation
 - RESTful API development (18 endpoints)
 - JWT authentication system
@@ -368,7 +387,11 @@ Project-Prototype_Team-4/
 - User interface and experience design
 - Accessibility implementation
 
+<<<<<<< HEAD
 **Antonio EnrÃ­quez Velasco** - Full Stack Developer & Project Integration
+=======
+**Antonio Enríquez Velasco** - Full Stack Developer & Project Integration
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a
 - Frontend-backend integration
 - AuthContext implementation
 - Protected routes configuration
@@ -502,9 +525,15 @@ MIT License - See [LICENSE](LICENSE) file for details.
 **Live Demo:** https://mindcare-bw9t.onrender.com
 
 **Team 4:**
+<<<<<<< HEAD
 - Diego Arias PÃ©rez
 - Gael Rodriguez Hernandez
 - Antonio EnrÃ­quez Velasco
+=======
+- Diego Arias Pérez
+- Gael Rodriguez Hernandez
+- Antonio Enríquez Velasco
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a
 
 ---
 
@@ -538,5 +567,9 @@ cd client && npm start
 
 ---
 
+<<<<<<< HEAD
 **Ready to improve your mental wellness? Start breathing! **
 
+=======
+**Ready to improve your mental wellness? Start breathing! **
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a

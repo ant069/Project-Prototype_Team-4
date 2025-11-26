@@ -119,6 +119,7 @@ process.on('SIGTERM', () => {
 });
 
 
+<<<<<<< HEAD
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
@@ -149,3 +150,5 @@ process.on('SIGTERM', () => {
     });
   }
 });
+=======
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿const errorHandler = (err, req, res, next) => {
   console.error('Error:', err);
 
@@ -53,3 +54,19 @@ process.on('uncaughtException', (err) => {
   console.log(err.name, err.message);
   process.exit(1);
 });
+=======
+const errorHandler = (err, req, res, next) => {
+  console.error('Error:', err.message);
+  
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  
+  res.status(statusCode).json({
+    success: false,
+    error: message,
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+  });
+};
+
+module.exports = errorHandler;
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a

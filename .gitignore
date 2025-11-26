@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿# Dependencies
 node_modules/
 */node_modules/
@@ -22,12 +23,33 @@ yarn-debug.log*
 yarn-error.log*
 
 # OS files
+=======
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment variables
+.env
+client/.env
+server/.env
+
+# Build
+client/build/
+dist/
+
+# Logs
+*.log
+
+# OS
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a
 .DS_Store
 Thumbs.db
 
 # IDE
 .vscode/
 .idea/
+<<<<<<< HEAD
 *.swp
 *.swo
 *~
@@ -38,3 +60,5 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
+=======
+>>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a
