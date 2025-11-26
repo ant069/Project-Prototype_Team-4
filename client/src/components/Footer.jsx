@@ -34,6 +34,7 @@ const Footer = () => {
       
       <div className="footer-bottom">
         <p>&copy; 2024 MindCare. All rights reserved.</p>
+        <p><a href="/privacy">Privacy Policy</a></p>
       </div>
     </footer>
   );
