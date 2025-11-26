@@ -1,4 +1,4 @@
-#  MindCare - Mental Wellness Platform
+# 🧘 MindCare - Mental Wellness Platform
 
 **Live Demo:** https://mindcare-bw9t.onrender.com  
 **Repository:** https://github.com/ant069/Project-Prototype_Team-4
@@ -19,7 +19,7 @@ Provide accessible, evidence-based tools to reduce stress, improve focus, and pr
 
 ---
 
-## 🚀 Technologies Used
+##  Technologies Used
 
 ### Frontend
 - **React 18.3.1** - Modern UI library with Hooks
@@ -52,22 +52,22 @@ Provide accessible, evidence-based tools to reduce stress, improve focus, and pr
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🔐 Authentication & User Management
-- ✅ User registration with email validation
-- ✅ Secure login with JWT tokens
+###  Authentication & User Management
+-  User registration with email validation
+-  Secure login with JWT tokens
 -  Password hashing with bcrypt (10 salt rounds)
 -  Profile management (edit name, email, password)
 -  Protected routes (frontend + backend)
 -  Persistent sessions with localStorage
 
-### 🧘 Wellness Exercises
-- ✅ **Box Breathing** (4-4-4-4) - Navy SEAL technique
+###  Wellness Exercises
+-  **Box Breathing** (4-4-4-4) - Navy SEAL technique
 -  **4-7-8 Breathing** - Dr. Andrew Weil's method
 -  **Deep Breathing** (6-2-6) - Stress reduction
-- ✅ **Guided Meditation** - 5/10/15/20 minute sessions
-- ✅ **Body Scan** - 7-step progressive relaxation
+-  **Guided Meditation** - 5/10/15/20 minute sessions
+-  **Body Scan** - 7-step progressive relaxation
 -  Animated breathing guide with visual cues
 -  Timer with Start/Pause/Stop controls
 
