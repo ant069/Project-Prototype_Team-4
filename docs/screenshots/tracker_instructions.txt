@@ -1,0 +1,9 @@
+﻿ SCREENSHOT: Session Tracker
+
+**Cómo tomar:**
+1. Ve a Tracker page
+2. Asegúrate de tener varias sesiones guardadas
+3. Toma screenshot de pantalla completa
+4. Guarda como "tracker.png" en esta carpeta
+
+**Dimensiones recomendadas:** 1920x1080 o 1280x720

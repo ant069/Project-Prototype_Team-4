@@ -1,17 +1,48 @@
-# 🧘 MindCare - Mental Wellness Platform
+﻿#  MindCare - Mental Wellness Platform
+
+![MongoDB](https://img.shields.io/badge/MongoDB-4.4-green?logo=mongodb)
+![Express](https://img.shields.io/badge/Express-4.21.1-blue?logo=express)
+![React](https://img.shields.io/badge/React-18.3.1-blue?logo=react)
+![Node](https://img.shields.io/badge/Node-18+-green?logo=node.js)
+![JWT](https://img.shields.io/badge/JWT-Auth-orange?logo=jsonwebtokens)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+##  Live Demo
+ **Live Application:** https://mindcare-bw9t.onrender.com
+
+## 📸 Screenshots
+
+### 🏠 Landing Page
+![Landing Page](docs/screenshots/landing.png)
+*Clean, modern landing page with clear call-to-action*
+
+### 📊 Dashboard
+![Dashboard](docs/screenshots/dashboard.png)
+*Track your progress with statistics and recent sessions*
+
+### 🫁 Breathing Exercise
+![Breathing Exercise](docs/screenshots/breathing.png)
+*Interactive breathing animations for stress relief*
+
+### 📈 Session Tracker
+![Session Tracker](docs/screenshots/tracker.png)
+*Complete history of your wellness journey*
+
+---
+# ðŸ§˜ MindCare - Mental Wellness Platform
 
 **Live Demo:** https://mindcare-bw9t.onrender.com  
 **Repository:** https://github.com/ant069/Project-Prototype_Team-4
 
 ---
 
-## 📋 Description
+## ðŸ“‹ Description
 
 MindCare is a professional mental wellness web platform built with the MERN stack (MongoDB, Express, React, Node.js). It offers scientifically validated breathing exercises, guided meditation, body scan, and personalized progress tracking to help users manage stress and improve mental wellbeing.
 
 ---
 
-## 🎯 Objective
+## ðŸŽ¯ Objective
 
 Provide accessible, evidence-based tools to reduce stress, improve focus, and promote mental wellness through breathing techniques, mindfulness practices, and progress tracking.
 
@@ -52,6 +83,24 @@ Provide accessible, evidence-based tools to reduce stress, improve focus, and pr
 
 ---
 
+
+## 📸 Screenshots
+
+### Landing Page
+![Landing Page](docs/screenshots/landing.png)
+*Welcoming landing page with call-to-action*
+
+### Dashboard
+![Dashboard](docs/screenshots/dashboard.png)
+*User dashboard with daily quote and activity overview*
+
+### Breathing Exercise
+![Breathing Exercise](docs/screenshots/breathing.png)
+*Interactive breathing exercise with visual guide*
+
+### Meditation Tracker
+![Tracker](docs/screenshots/tracker.png)
+*Track your meditation sessions and progress*
 ##  Features
 
 ###  Authentication & User Management
@@ -305,7 +354,7 @@ Project-Prototype_Team-4/
 
 ### Team 4 - MindCare
 
-**Diego Arias Pérez** - Backend Developer & Database Architecture
+**Diego Arias PÃ©rez** - Backend Developer & Database Architecture
 - MongoDB schema design and implementation
 - RESTful API development (18 endpoints)
 - JWT authentication system
@@ -319,7 +368,7 @@ Project-Prototype_Team-4/
 - User interface and experience design
 - Accessibility implementation
 
-**Antonio Enríquez Velasco** - Full Stack Developer & Project Integration
+**Antonio EnrÃ­quez Velasco** - Full Stack Developer & Project Integration
 - Frontend-backend integration
 - AuthContext implementation
 - Protected routes configuration
@@ -453,9 +502,9 @@ MIT License - See [LICENSE](LICENSE) file for details.
 **Live Demo:** https://mindcare-bw9t.onrender.com
 
 **Team 4:**
-- Diego Arias Pérez
+- Diego Arias PÃ©rez
 - Gael Rodriguez Hernandez
-- Antonio Enríquez Velasco
+- Antonio EnrÃ­quez Velasco
 
 ---
 
@@ -490,3 +539,4 @@ cd client && npm start
 ---
 
 **Ready to improve your mental wellness? Start breathing! **
+

@@ -1,0 +1,9 @@
+﻿ SCREENSHOT: Landing Page
+
+**Cómo tomar:**
+1. Abre https://mindcare-bw9t.onrender.com
+2. Asegúrate de estar en la página principal (logout si es necesario)
+3. Toma screenshot de pantalla completa
+4. Guarda como "landing.png" en esta carpeta
+
+**Dimensiones recomendadas:** 1920x1080 o 1280x720

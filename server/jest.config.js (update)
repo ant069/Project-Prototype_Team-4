@@ -1,0 +1,12 @@
+module.exports = {
+  testEnvironment: 'node',
+  roots: ['<rootDir>/src'],
+  transform: {
+    '^.+\\.jsx?$': 'babel-jest',
+  },
+  moduleFileExtensions: ['js', 'jsx', 'json', 'node'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  coverageDirectory: '<rootDir>/coverage',
+  collectCoverage: true,
+  collectCoverageFrom: ['**/*.js', '!**/node_modules/**'],
+};
