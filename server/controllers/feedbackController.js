@@ -1,33 +1,60 @@
 ﻿const Feedback = require('../models/Feedback');
 
-// Crear nuevo feedback
-const createFeedback = async (req, res) => {
+// @desc    Crear feedback
+// @route   POST /api/feedback
+// @access  Private
+exports.createFeedback = async (req, res) => {
   try {
-    const { category, message, rating } = req.body;
+    const { session, rating, comment, category } = req.body;
+
     const feedback = new Feedback({
-      userId: req.user.userId,
-      category,
-      message,
-      rating
+      user: req.user.userId,
+      session,
+      rating,
+      comment,
+      category
     });
+
     await feedback.save();
-    res.status(201).json({ message: 'Feedback enviado correctamente', feedback });
+    res.status(201).json(feedback);
   } catch (error) {
-    res.status(500).json({ message: 'Error al enviar feedback', error: error.message });
+    console.error('Error creating feedback:', error);
+    res.status(500).json({ message: 'Error al crear el feedback' });
   }
 };
 
-// Obtener todo el feedback (solo admin)
-const getAllFeedback = async (req, res) => {
+// @desc    Obtener feedback del usuario
+// @route   GET /api/feedback
+// @access  Private
+exports.getUserFeedback = async (req, res) => {
   try {
-    const feedback = await Feedback.find().populate('userId', 'name email').sort({ createdAt: -1 });
+    const feedback = await Feedback.find({ user: req.user.userId })
+      .populate('session')
+      .sort({ createdAt: -1 });
     res.json(feedback);
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener feedback', error: error.message });
+    console.error('Error getting feedback:', error);
+    res.status(500).json({ message: 'Error al obtener el feedback' });
   }
 };
 
-module.exports = {
-  createFeedback,
-  getAllFeedback
+// @desc    Obtener feedback específico
+// @route   GET /api/feedback/:id
+// @access  Private
+exports.getFeedbackById = async (req, res) => {
+  try {
+    const feedback = await Feedback.findOne({
+      _id: req.params.id,
+      user: req.user.userId
+    }).populate('session');
+
+    if (!feedback) {
+      return res.status(404).json({ message: 'Feedback no encontrado' });
+    }
+
+    res.json(feedback);
+  } catch (error) {
+    console.error('Error getting feedback:', error);
+    res.status(500).json({ message: 'Error al obtener el feedback' });
+  }
 };

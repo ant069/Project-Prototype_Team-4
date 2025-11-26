@@ -1,24 +1,35 @@
-const User = require('../models/User');
+﻿const User = require('../models/User');
+const Session = require('../models/Session');
 
-const getProfile = async (req, res) => {
+// @desc    Obtener perfil del usuario
+// @route   GET /api/user/profile
+// @access  Private
+exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.userId).select('-password');
+    
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
+
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener el perfil', error: error.message });
+    console.error('Error getting profile:', error);
+    res.status(500).json({ message: 'Error al obtener el perfil' });
   }
 };
 
-const updateProfile = async (req, res) => {
+// @desc    Actualizar perfil del usuario
+// @route   PUT /api/user/profile
+// @access  Private
+exports.updateProfile = async (req, res) => {
   try {
-    const { name, preferences } = req.body;
+    const { name, email, preferences } = req.body;
+
     const user = await User.findByIdAndUpdate(
       req.user.userId,
-      { name, preferences },
-      { new: true }
+      { name, email, preferences },
+      { new: true, runValidators: true }
     ).select('-password');
 
     if (!user) {
@@ -27,11 +38,35 @@ const updateProfile = async (req, res) => {
 
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: 'Error al actualizar el perfil', error: error.message });
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: 'Error al actualizar el perfil' });
   }
 };
 
-module.exports = {
-  getProfile,
-  updateProfile
+// @desc    Obtener estadísticas del usuario
+// @route   GET /api/user/stats
+// @access  Private
+exports.getStats = async (req, res) => {
+  try {
+    const sessions = await Session.find({ user: req.user.userId });
+
+    const stats = {
+      totalSessions: sessions.length,
+      completedSessions: sessions.filter(s => s.completed).length,
+      totalMinutes: sessions.reduce((acc, s) => acc + s.duration, 0),
+      averageDuration: sessions.length > 0 
+        ? sessions.reduce((acc, s) => acc + s.duration, 0) / sessions.length 
+        : 0,
+      sessionsByType: sessions.reduce((acc, s) => {
+        acc[s.type] = (acc[s.type] || 0) + 1;
+        return acc;
+      }, {}),
+      recentSessions: sessions.slice(0, 5)
+    };
+
+    res.json(stats);
+  } catch (error) {
+    console.error('Error getting stats:', error);
+    res.status(500).json({ message: 'Error al obtener estadísticas' });
+  }
 };

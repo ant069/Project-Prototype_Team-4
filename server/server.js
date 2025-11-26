@@ -1,154 +1,60 @@
-require('dotenv').config();
+﻿require('dotenv').config({ debug: true });
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const connectDB = require('./config/database');
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// Security Middleware
-app.use(helmet());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Connect to database
+connectDB();
 
-// CORS Configuration
+// Security middleware
+app.use(helmet());
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+});
+app.use(limiter);
+
+// CORS configuration
 const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    process.env.CLIENT_URL || 'http://localhost:3000'
-  ],
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
   credentials: true
 };
 app.use(cors(corsOptions));
 
-// Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
-});
-app.use('/api/', limiter);
+// Body parsing middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('✅ MongoDB Connected');
-    console.log('📊 Database:', mongoose.connection.name);
-  })
-  .catch(err => {
-    console.error('❌ MongoDB connection error:', err.message);
-    process.exit(1);
-  });
+// Routes
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/sessions', require('./routes/sessions'));
+app.use('/api/user', require('./routes/user'));
+app.use('/api/feedback', require('./routes/feedback'));
+app.use('/api/quote', require('./routes/quote'));
 
-// Import Routes
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
-const sessionRoutes = require('./routes/sessions');
-const feedbackRoutes = require('./routes/feedback');
-const quoteRoutes = require('./routes/quote');
-
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/sessions', sessionRoutes);
-app.use('/api/feedback', feedbackRoutes);
-app.use('/api/quote', quoteRoutes);
-
-// Health Check Endpoint
+// Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    ok: true, 
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development',
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
-  });
+  res.json({ status: 'ok', message: 'Server is running' });
 });
 
-// Root endpoint
-app.get('/', (req, res) => {
-  res.json({
-    message: 'MindCare API Server',
-    version: '1.0.0',
-    endpoints: {
-      health: '/api/health',
-      auth: '/api/auth/*',
-      user: '/api/user/*',
-      sessions: '/api/sessions/*',
-      feedback: '/api/feedback',
-      quote: '/api/quote'
-    }
-  });
-});
+// Error handling middleware
+app.use(errorHandler);
 
-// 404 Handler
+// 404 handler
 app.use((req, res) => {
-  res.status(404).json({ 
-    error: 'Route not found',
-    path: req.originalUrl 
-  });
+  res.status(404).json({ message: 'Route not found' });
 });
 
-// Global Error Handler
-app.use((err, req, res, next) => {
-  console.error('Error:', err.stack);
-  res.status(err.status || 500).json({
-    error: process.env.NODE_ENV === 'development' 
-      ? err.message 
-      : 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
-});
-
-// Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`\n🚀 Server running on port ${PORT}`);
-  console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🌐 API Base URL: http://localhost:${PORT}/api`);
-  console.log(`\n✨ Ready to accept connections\n`);
+  console.log(`Server running on port ${PORT}`);
 });
 
-// Graceful Shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
-  mongoose.connection.close(false, () => {
-    console.log('MongoDB connection closed');
-    process.exit(0);
-  });
-});
-
-
-<<<<<<< HEAD
-
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err) => {
-  console.log('UNHANDLED REJECTION!  Shutting down...');
-  console.log(err.name, err.message);
-  if (server) {
-    server.close(() => {
-      process.exit(1);
-    });
-  } else {
-    process.exit(1);
-  }
-});
-
-// Handle uncaught exceptions
-process.on('uncaughtException', (err) => {
-  console.log('UNCAUGHT EXCEPTION!  Shutting down...');
-  console.log(err.name, err.message);
-  process.exit(1);
-});
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('?? SIGTERM RECEIVED. Shutting down gracefully');
-  if (server) {
-    server.close(() => {
-      console.log(' Process terminated!');
-    });
-  }
-});
-=======
->>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a
+module.exports = app;
