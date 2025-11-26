@@ -1,0 +1,36 @@
+.daily-quote {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  border-radius: 20px;
+  color: white;
+  margin: 2rem 0;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+  text-align: center;
+}
+
+.quote-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.quote-text {
+  font-size: 1.4rem;
+  font-style: italic;
+  margin: 1.5rem 0;
+  line-height: 1.8;
+  border: none;
+}
+
+.quote-author {
+  display: block;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  opacity: 0.9;
+  font-style: normal;
+}
+
+.quote-loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+}
