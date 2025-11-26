@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import '../styles/Auth.css';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import API_URL from '../config/api';
 
-const Login = () => {
+function Login() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,65 +25,65 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(formData.email, formData.password);
-      navigate('/home', { replace: true });
+      const response = await axios.post(`${API_URL}/auth/login`, formData);
+      
+      // Guardar token en localStorage
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      
+      // Redirigir al dashboard
+      navigate('/dashboard');
     } catch (err) {
-      const errorMsg = err.response?.data?.error || err.message || 'Failed to login';
-      setError(errorMsg);
+      setError(err.response?.data?.message || 'Error al iniciar sesión');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <div className="auth-header">
-          <div className="auth-logo"></div>
-          <h1 className="auth-title">MindCare</h1>
-          <p className="auth-subtitle">Sign in to continue your mindfulness journey</p>
-        </div>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>MindCare</h2>
+        <p>Sign in to continue your mindfulness journey</p>
 
-        {error && <div className="alert alert-error">{error}</div>}
+        {error && <div className="error-message">{error}</div>}
 
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">Email</label>
+            <label>Email</label>
             <input
               type="email"
               name="email"
-              className="form-input"
-              placeholder="your@email.com"
               value={formData.email}
               onChange={handleChange}
               required
+              placeholder="your.email@example.com"
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label">Password</label>
+            <label>Password</label>
             <input
               type="password"
               name="password"
-              className="form-input"
-              placeholder=""
               value={formData.password}
               onChange={handleChange}
               required
+              placeholder="••••••••"
             />
           </div>
 
-          <button type="submit" className="btn-submit" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+          <button type="submit" disabled={loading}>
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
 
-        <div className="auth-footer">
-          Don't have an account? <Link to="/register" className="auth-link">Sign Up</Link>
-        </div>
+        <p className="auth-link">
+          Don't have an account? <Link to="/signup">Sign Up</Link>
+        </p>
       </div>
     </div>
   );
-};
+}
 
 export default Login;
