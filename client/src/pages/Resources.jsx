@@ -13,7 +13,7 @@ const Resources = () => {
       tag: 'Education',
       links: [
         {
-          icon: '🏥',
+          icon: '­ƒÅÑ',
           title: 'Mental Health America',
           description: 'Comprehensive mental health resources',
           url: 'https://www.mhanational.org'

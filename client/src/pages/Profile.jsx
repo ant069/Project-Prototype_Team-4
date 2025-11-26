@@ -39,7 +39,7 @@ const Profile = () => {
       const response = await api.put('/user/profile', formData);
       updateUser(response.data.user);
       setIsEditing(false);
-      setMessage({ type: 'success', text: 'Profile updated successfully! ✅' });
+      setMessage({ type: 'success', text: 'Profile updated successfully! Ô£à' });
     } catch (error) {
       setMessage({ type: 'error', text: error.response?.data?.error || 'Failed to update profile' });
     }
@@ -67,7 +67,7 @@ const Profile = () => {
       
       setPasswordData({ oldPassword: '', newPassword: '', confirmPassword: '' });
       setShowPasswordForm(false);
-      setMessage({ type: 'success', text: 'Password changed successfully! ✅' });
+      setMessage({ type: 'success', text: 'Password changed successfully! Ô£à' });
     } catch (error) {
       setMessage({ type: 'error', text: error.response?.data?.error || 'Failed to change password' });
     }
@@ -257,7 +257,7 @@ const Profile = () => {
           </form>
         ) : (
           <div className="profile-display">
-            <p className="text-muted">••••••••</p>
+            <p className="text-muted">ÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇó</p>
           </div>
         )}
       </div>

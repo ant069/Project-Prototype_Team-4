@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import '../styles/Auth.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-
-function Login() {
+const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,134 +27,65 @@ function Login() {
     setLoading(true);
 
     try {
-      console.log('Enviando login a:', `${API_URL}/auth/login`);
-      console.log('Datos:', formData);
-      
-      const response = await axios.post(`${API_URL}/auth/login`, formData);
-      
-      console.log('Respuesta:', response.data);
-      
-      // Guardar token y usuario
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      
-      // Redirigir al dashboard
-      navigate('/dashboard');
+      await login(formData.email, formData.password);
+      navigate('/home', { replace: true });
     } catch (err) {
-      console.error('Error completo:', err);
-      console.error('Error response:', err.response);
-      setError(err.response?.data?.message || 'Error al iniciar sesión. Verifica tus credenciales.');
+      const errorMsg = err.response?.data?.error || err.message || 'Failed to login';
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-    }}>
-      <div style={{
-        background: 'white',
-        padding: '2rem',
-        borderRadius: '10px',
-        boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
-        width: '100%',
-        maxWidth: '400px'
-      }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>MindCare</h2>
-        <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
-          Sign in to continue your mindfulness journey
-        </p>
+    <div className="auth-page">
+      <div className="auth-container">
+        <div className="auth-header">
+          <div className="auth-logo"></div>
+          <h1 className="auth-title">MindCare</h1>
+          <p className="auth-subtitle">Sign in to continue your mindfulness journey</p>
+        </div>
 
-        {error && (
-          <div style={{
-            background: '#fee',
-            color: '#c33',
-            padding: '0.75rem',
-            borderRadius: '5px',
-            marginBottom: '1rem',
-            textAlign: 'center'
-          }}>
-            {error}
-          </div>
-        )}
+        {error && <div className="alert alert-error">{error}</div>}
 
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-              Email
-            </label>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Email</label>
             <input
               type="email"
               name="email"
+              className="form-input"
+              placeholder="your@email.com"
               value={formData.email}
               onChange={handleChange}
               required
-              placeholder="your.email@example.com"
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #ddd',
-                borderRadius: '5px',
-                fontSize: '1rem'
-              }}
             />
           </div>
 
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-              Password
-            </label>
+          <div className="form-group">
+            <label className="form-label">Password</label>
             <input
               type="password"
               name="password"
+              className="form-input"
+              placeholder=""
               value={formData.password}
               onChange={handleChange}
               required
-              placeholder="••••••••"
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #ddd',
-                borderRadius: '5px',
-                fontSize: '1rem'
-              }}
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              background: loading ? '#ccc' : '#667eea',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              fontSize: '1rem',
-              fontWeight: '600',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'background 0.3s'
-            }}
-          >
-            {loading ? 'Signing In...' : 'Sign In'}
+          <button type="submit" className="btn-submit" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-          Don't have an account?{' '}
-          <Link to="/signup" style={{ color: '#667eea', textDecoration: 'none', fontWeight: '600' }}>
-            Sign Up
-          </Link>
-        </p>
+        <div className="auth-footer">
+          Don't have an account? <Link to="/register" className="auth-link">Sign Up</Link>
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default Login;

@@ -25,7 +25,7 @@ const Feedback = () => {
 
     try {
       await api.post('/feedback', formData);
-      setMessage({ type: 'success', text: 'Thank you for your feedback! We appreciate your input. 🙏' });
+      setMessage({ type: 'success', text: 'Thank you for your feedback! We appreciate your input. ­ƒÖÅ' });
       setFormData({ ...formData, message: '' });
     } catch (error) {
       console.error('Error submitting feedback:', error);
@@ -45,19 +45,19 @@ const Feedback = () => {
       <div className="feedback-content">
         <div className="feedback-info">
           <div className="info-card">
-            <div className="info-icon">💡</div>
+            <div className="info-icon">­ƒÆí</div>
             <h3>Suggestions</h3>
             <p>Have ideas for new features or improvements? We're all ears!</p>
           </div>
 
           <div className="info-card">
-            <div className="info-icon">🐛</div>
+            <div className="info-icon">­ƒÉø</div>
             <h3>Report Issues</h3>
             <p>Found a bug? Let us know so we can fix it quickly.</p>
           </div>
 
           <div className="info-card">
-            <div className="info-icon">⭐</div>
+            <div className="info-icon">Ô¡É</div>
             <h3>Share Your Experience</h3>
             <p>Tell us how MindCare has helped you on your wellness journey.</p>
           </div>
