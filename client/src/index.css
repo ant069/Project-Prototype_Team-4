@@ -1,0 +1,64 @@
+﻿/* Global Variables - MindCare Original Design */
+:root {
+  /* Azules principales */
+  --primary: #0d6efd;
+  --primary-dark: #0252cc;
+  --primary-light: #4d94ff;
+  
+  /* Cyan/Turquesa */
+  --cyan: #00d4ff;
+  --cyan-light: #5ce1ff;
+  
+  /* Verde */
+  --success: #10b981;
+  --success-dark: #059669;
+  
+  /* Backgrounds */
+  --bg-main: #f8f9fa;
+  --bg-card: #ffffff;
+  --bg-pink: #fce4ec;
+  
+  /* Gradientes */
+  --gradient-primary: linear-gradient(135deg, #0d6efd 0%, #00d4ff 100%);
+  --gradient-hero: linear-gradient(135deg, #0d6efd 0%, #00d4ff 50%, #10b981 100%);
+  --gradient-footer: linear-gradient(to right, #0d6efd, #00bcd4, #10b981);
+  --gradient-icon: linear-gradient(135deg, #0d6efd, #00bcd4);
+  
+  /* Texto */
+  --text-dark: #2c3e50;
+  --text-medium: #4a5568;
+  --text-light: #6c757d;
+  --text-white: #ffffff;
+  
+  /* Sombras */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.2);
+  
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 50%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-main);
+  color: var(--text-dark);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
