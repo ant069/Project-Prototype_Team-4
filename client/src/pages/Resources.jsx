@@ -188,7 +188,6 @@ const Resources = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

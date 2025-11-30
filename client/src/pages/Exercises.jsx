@@ -65,7 +65,6 @@ const Exercises = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

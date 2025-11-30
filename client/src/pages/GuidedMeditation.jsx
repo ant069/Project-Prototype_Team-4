@@ -95,7 +95,6 @@ const GuidedMeditation = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

@@ -113,7 +113,6 @@ const Tracker = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

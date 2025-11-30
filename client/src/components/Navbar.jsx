@@ -1,7 +1,7 @@
-﻿import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import '../styles/Navbar.css';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import "../styles/Navbar.css";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -9,33 +9,33 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate("/");
   };
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
         <Link to={user ? "/home" : "/"} className="navbar-brand">
-           MindCare
+          <span role="img" aria-label="logo" className="brand-icon"></span>
+          MindCare
         </Link>
-        
         <div className="navbar-menu">
           {user ? (
             <>
-              <Link to="/home" className="nav-link">Home</Link>
-              <Link to="/exercises" className="nav-link">Exercises</Link>
-              <Link to="/tracker" className="nav-link">Tracker</Link>
-              <Link to="/resources" className="nav-link">Resources</Link>
-              <Link to="/feedback" className="nav-link">Feedback</Link>
-              <Link to="/profile" className="nav-link">Profile</Link>
-              <button onClick={handleLogout} className="btn btn-logout">
+              <Link to="/home" className="nav-btn">Home</Link>
+              <Link to="/exercises" className="nav-btn">Exercises</Link>
+              <Link to="/tracker" className="nav-btn">Tracker</Link>
+              <Link to="/resources" className="nav-btn">Resources</Link>
+              <Link to="/feedback" className="nav-btn">Feedback</Link>
+              <Link to="/profile" className="nav-btn">Profile</Link>
+              <button onClick={handleLogout} className="nav-btn logout-btn">
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="nav-link">Login</Link>
-              <Link to="/register" className="btn btn-primary">Sign Up</Link>
+              <Link to="/login" className="nav-btn">Sign In</Link>
+              <Link to="/register" className="nav-btn nav-btn-primary">Get Started</Link>
             </>
           )}
         </div>

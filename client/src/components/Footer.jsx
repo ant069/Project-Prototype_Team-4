@@ -1,43 +1,33 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/index.css';
+import React from "react";
+import "../styles/Footer.css";
 
-const Footer = () => {
-  return (
-    <footer className="footer">
+const Footer = () => (
+  <div className="footer-section">
+    <footer>
       <div className="footer-content">
-        <div className="footer-section">
-          <h3>🧠 MindCare</h3>
+        <div className="footer-brand">
+          <span role="img" aria-label="brain" style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}></span>
+          <h2 style={{ margin: "0.5rem 0" }}>MindCare</h2>
           <p>Promoting mental health and wellbeing through evidence-based breathing techniques.</p>
         </div>
-        
-        <div className="footer-section">
+        <div className="footer-links">
           <h3>Quick Links</h3>
-          <ul className="footer-links">
-            <li><Link to="/exercises">Exercises</Link></li>
-            <li><Link to="/tracker">Progress Tracker</Link></li>
-            <li><Link to="/resources">Resources</Link></li>
-            <li><Link to="/feedback">Feedback</Link></li>
-          </ul>
+          <a href="/exercises">Exercises</a>
+          <a href="/tracker">Progress Tracker</a>
+          <a href="/resources">Resources</a>
+          <a href="/feedback">Feedback</a>
         </div>
-        
-        <div className="footer-section">
-          <h3>ODS 3: Health & Wellbeing</h3>
+        <div className="footer-ods">
+          <h2>ODS 3: Health & Wellbeing</h2>
           <p>This project contributes to UN Sustainable Development Goal 3</p>
-          <div className="social-icons">
-            <a href="#" aria-label="Facebook"></a>
-            <a href="#" aria-label="Twitter"></a>
-            <a href="#" aria-label="Instagram"></a>
-          </div>
         </div>
       </div>
-      
       <div className="footer-bottom">
-        <p>&copy; 2024 MindCare. All rights reserved.</p>
-        <p><a href="/privacy">Privacy Policy</a></p>
+         2025 MindCare. All rights reserved.<br />
+        <a href="/privacy" style={{ color: "#60a5fa" }}>Privacy Policy</a>
       </div>
     </footer>
-  );
-};
+  </div>
+);
 
 export default Footer;

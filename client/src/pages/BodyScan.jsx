@@ -109,7 +109,6 @@ const BodyScan = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

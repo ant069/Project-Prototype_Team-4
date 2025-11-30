@@ -115,7 +115,6 @@ const BreathingExercise = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };
