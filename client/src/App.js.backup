@@ -1,6 +1,7 @@
-﻿import React from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import Navbar from './components/Navbar';
 import Landing from './pages/Landing';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -13,7 +14,6 @@ import Tracker from './pages/Tracker';
 import Profile from './pages/Profile';
 import Resources from './pages/Resources';
 import Feedback from './pages/Feedback';
-import Navbar from './components/Navbar';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -37,9 +37,10 @@ const PublicRoute = ({ children }) => {
 
 function AppRoutes() {
   const { user } = useAuth();
-
+  
   return (
     <>
+      {user && <Navbar />}
       <Routes>
         <Route path="/" element={
           <PublicRoute>
