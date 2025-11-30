@@ -1,77 +1,91 @@
-const express = require('express');
+﻿const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
-// Fallback quotes array (más variedad)
-const fallbackQuotes = [
-  {
-    content: "Peace comes from within. Do not seek it without.",
-    author: "Buddha"
-  },
-  {
-    content: "The present moment is the only time over which we have dominion.",
-    author: "Thích Nhất Hạnh"
-  },
-  {
-    content: "Breathing in, I calm body and mind. Breathing out, I smile.",
-    author: "Thích Nhất Hạnh"
-  },
-  {
-    content: "The mind is everything. What you think you become.",
-    author: "Buddha"
-  },
-  {
-    content: "Be where you are; otherwise you will miss your life.",
-    author: "Buddha"
-  },
-  {
-    content: "The only way out is through.",
-    author: "Robert Frost"
-  },
-  {
-    content: "Feelings come and go like clouds in a windy sky. Conscious breathing is my anchor.",
-    author: "Thích Nhất Hạnh"
-  },
-  {
-    content: "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.",
-    author: "Buddha"
-  },
-  {
-    content: "Within you there is a stillness and a sanctuary to which you can retreat at any time.",
-    author: "Hermann Hesse"
-  },
-  {
-    content: "Surrender to what is. Let go of what was. Have faith in what will be.",
-    author: "Sonia Ricotti"
-  }
-];
+let cachedQuote = null;
+let cacheTimestamp = null;
+const CACHE_DURATION = 60 * 60 * 1000;
 
-router.get('/', async (req, res) => {
+router.get('/daily', async (req, res) => {
   try {
-    // Try to fetch from API with timeout
+    const now = Date.now();
+    
+    if (cachedQuote && cacheTimestamp && (now - cacheTimestamp) < CACHE_DURATION) {
+      return res.json({
+        success: true,
+        quote: cachedQuote,
+        cached: true
+      });
+    }
+
     const response = await axios.get('https://api.quotable.io/random', {
-      timeout: 5000,
       params: {
-        tags: 'wisdom|inspirational|life'
-      }
+        tags: 'inspirational|wisdom|happiness|wellness',
+        maxLength: 150
+      },
+      timeout: 5000
     });
-    
-    console.log('✅ Quote fetched from API');
-    
-    res.json({
-      content: response.data.content,
+
+    cachedQuote = {
+      text: response.data.content,
       author: response.data.author,
-      source: 'api'
+      tags: response.data.tags
+    };
+    cacheTimestamp = now;
+
+    res.json({
+      success: true,
+      quote: cachedQuote,
+      cached: false
     });
   } catch (error) {
-    console.warn('⚠️ Quote API Error, using fallback:', error.message);
+    console.error('Quote fetch error:', error.message);
     
-    // Return random fallback quote
-    const randomQuote = fallbackQuotes[Math.floor(Math.random() * fallbackQuotes.length)];
-    
+    if (cachedQuote) {
+      return res.json({
+        success: true,
+        quote: cachedQuote,
+        cached: true,
+        warning: 'Using cached quote due to API error'
+      });
+    }
+
     res.json({
-      ...randomQuote,
-      source: 'fallback'
+      success: true,
+      quote: {
+        text: 'The greatest glory in living lies not in never falling, but in rising every time we fall.',
+        author: 'Nelson Mandela',
+        tags: ['inspirational']
+      },
+      cached: false,
+      warning: 'Using fallback quote'
+    });
+  }
+});
+
+router.get('/random', async (req, res) => {
+  try {
+    const response = await axios.get('https://api.quotable.io/random', {
+      params: {
+        tags: 'inspirational|wisdom|happiness|wellness',
+        maxLength: 150
+      },
+      timeout: 5000
+    });
+
+    res.json({
+      success: true,
+      quote: {
+        text: response.data.content,
+        author: response.data.author,
+        tags: response.data.tags
+      }
+    });
+  } catch (error) {
+    console.error('Random quote error:', error.message);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch quote'
     });
   }
 });
