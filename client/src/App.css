@@ -96,3 +96,17 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #764ba2;
 }
+
+
+/* Main Content Area */
+.main-content {
+  min-height: calc(100vh - 180px);
+  padding: 2rem 0;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
