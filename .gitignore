@@ -62,3 +62,12 @@ coverage/
 *.temp
 =======
 >>>>>>> 505d182e36863c3ddf638af3803f1ea4114dcf3a
+
+# Cache files - DO NOT COMMIT
+**/node_modules/.cache/
+client/node_modules/.cache/
+server/node_modules/.cache/
+.cache/
+
+# Backup files
+*.backup
