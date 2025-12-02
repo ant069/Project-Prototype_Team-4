@@ -17,7 +17,7 @@
     const field = Object.keys(err.keyPattern)[0];
     return res.status(400).json({
       success: false,
-      error: \ already exists
+      error: "already exists"
     });
   }
 
